@@ -1,0 +1,257 @@
+{
+    "name": {
+        "ar": "افتراضي",
+        "en": "Default"
+    },
+    "description": {
+        "ar": "ثيم متجر إلكتروني عام — لوحة ألوان محايدة، خطوط واضحة، وكتل جاهزة للتعديل.",
+        "en": "A generic ecommerce theme — neutral palette, clean typography, and ready-to-edit sections."
+    },
+    "settings": {
+        "colors": {
+            "primary": "#2F7AB5",
+            "secondary": "#1E3A8A",
+            "accent": "#8B5CF6",
+            "background": "#FFFFFF",
+            "surface": "#F8FAFC",
+            "text": "#0F172A",
+            "muted": "#64748B"
+        },
+        "color_schemes": [
+            {
+                "key": "1",
+                "name": "Default",
+                "background": "#FFFFFF",
+                "surface": "#F8FAFC",
+                "text": "#0F172A",
+                "muted": "#64748B",
+                "primary": "#2F7AB5",
+                "button": "#2F7AB5",
+                "button_text": "#FFFFFF",
+                "accent": "#8B5CF6"
+            },
+            {
+                "key": "2",
+                "name": "Dark",
+                "background": "#0F172A",
+                "surface": "#1E293B",
+                "text": "#F8FAFC",
+                "muted": "#94A3B8",
+                "primary": "#38BDF8",
+                "button": "#2F7AB5",
+                "button_text": "#FFFFFF",
+                "accent": "#A78BFA"
+            }
+        ],
+        "typography": {
+            "heading_font": "IBM Plex Sans Arabic",
+            "body_font": "IBM Plex Sans Arabic",
+            "base_size": 16
+        },
+        "radius": {
+            "card": 12,
+            "button": 8
+        },
+        "effects": {
+            "product_border": false,
+            "shine_animation": false
+        },
+        "product_card": {
+            "show_image": true,
+            "show_title": true,
+            "show_price": true,
+            "show_compare_price": true,
+            "show_rating": true,
+            "show_add_to_cart": true,
+            "show_sale_badge": true,
+            "show_new_badge": false,
+            "show_out_of_stock_badge": true,
+            "border": false,
+            "hover_zoom": true
+        },
+        "product_page": {
+            "breadcrumbs": true,
+            "show_rating": true,
+            "show_related": true,
+            "sticky_purchase_bar": false,
+            "show_share": true,
+            "show_quantity_stepper": true,
+            "buy_now_button": false
+        },
+        "cart": {
+            "free_shipping_bar": true,
+            "free_shipping_threshold": 200,
+            "show_coupon": true,
+            "show_cross_sell": false,
+            "show_order_summary": true
+        }
+    },
+    "header": {
+        "logo_text": "Storefront",
+        "background_color": "#FFFFFF",
+        "text_color": "#0F172A",
+        "accent_color": "#2F7AB5",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "category_count": 5,
+        "menu": [
+            { "label": { "ar": "الرئيسية", "en": "Home" }, "url": "/" },
+            { "label": { "ar": "كل المنتجات", "en": "All products" }, "url": "/collections/all" }
+        ],
+        "show_search": true,
+        "show_account": true,
+        "show_cart": true
+    },
+    "footer": {
+        "tagline": { "ar": "متجرك الموثوق لكل ما تحتاجه.", "en": "Your trusted store for everything you need." },
+        "copyright_text": "Storefront",
+        "show_links": true,
+        "background_color": "#0F172A",
+        "text_color": "#F8FAFC",
+        "muted_color": "#94A3B8",
+        "columns": [
+            {
+                "heading": { "ar": "تسوق", "en": "Shop" },
+                "links": [
+                    { "label": { "ar": "كل المنتجات", "en": "All products" }, "url": "/collections/all" },
+                    { "label": { "ar": "الأكثر مبيعًا", "en": "Bestsellers" }, "url": "/collections/bestsellers" }
+                ]
+            },
+            {
+                "heading": { "ar": "المساعدة", "en": "Help" },
+                "links": [
+                    { "label": { "ar": "تواصل معنا", "en": "Contact us" }, "url": "/contact" },
+                    { "label": { "ar": "الشحن والإرجاع", "en": "Shipping & returns" }, "url": "/pages/shipping" }
+                ]
+            }
+        ],
+        "social": [
+            { "platform": "instagram", "url": "https://instagram.com/" },
+            { "platform": "twitter", "url": "https://twitter.com/" }
+        ],
+        "payment_icons": ["mada", "visa", "mastercard"],
+        "show_logo": true
+    },
+    "blocks": [
+        {
+            "type": "PromoBar",
+            "props": {
+                "sectionPaddingTop": "none",
+                "sectionPaddingBottom": "none",
+                "sectionBackground": "",
+                "sectionWidth": "full",
+                "sectionTextAlign": "center",
+                "hidden": false,
+                "text": { "ar": "شحن مجاني للطلبات فوق ٢٠٠ ريال", "en": "Free shipping over 200 SAR" },
+                "url": "",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Hero",
+            "props": {
+                "sectionPaddingTop": "large",
+                "sectionPaddingBottom": "large",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "مرحبًا بكم في متجرنا", "en": "Welcome to our store" },
+                "subtitle": { "ar": "تسوّق أحدث المنتجات بأفضل الأسعار.", "en": "Shop the latest products at the best prices." },
+                "backgroundImage": null,
+                "overlayOpacity": 30,
+                "height": "medium",
+                "ctaText": { "ar": "تسوق الآن", "en": "Shop now" },
+                "ctaUrl": "/collections/all",
+                "layout": "center",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "ProductsGrid",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "وصل حديثًا", "en": "New arrivals" },
+                "source": "latest",
+                "categoryId": null,
+                "productIds": [],
+                "columns": 4,
+                "mobileColumns": 2,
+                "limit": 8,
+                "showAddToCart": true,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Multicolumn",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "لماذا تتسوق معنا", "en": "Why shop with us" },
+                "columns": 3,
+                "items": [
+                    { "image": null, "icon": "truck", "label": { "ar": "توصيل سريع", "en": "Fast delivery" }, "text": { "ar": "نوصّل طلبك بسرعة إلى باب منزلك.", "en": "We deliver quickly to your door." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "shield", "label": { "ar": "دفع آمن", "en": "Secure payment" }, "text": { "ar": "مدى، Apple Pay، والدفع عند الاستلام.", "en": "mada, Apple Pay, and cash on delivery." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "refresh", "label": { "ar": "إرجاع سهل", "en": "Easy returns" }, "text": { "ar": "سياسة إرجاع واضحة وسهلة.", "en": "Clear, hassle-free returns." }, "ctaText": { "ar": "", "en": "" }, "url": "" }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "ProductsCarousel",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "منتجات مختارة", "en": "Selected products" },
+                "source": "bestseller",
+                "categoryId": null,
+                "productIds": [],
+                "limit": 10,
+                "autoplay": false,
+                "interval": 5,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "FaqAccordion",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "الأسئلة الشائعة", "en": "Frequently asked questions" },
+                "items": [
+                    { "question": { "ar": "كم تستغرق مدة التوصيل؟", "en": "How long does delivery take?" }, "answer": { "ar": "عادة من ٢ إلى ٥ أيام عمل.", "en": "Usually 2 to 5 business days." } },
+                    { "question": { "ar": "هل يمكنني إرجاع المنتج؟", "en": "Can I return a product?" }, "answer": { "ar": "نعم، خلال ١٤ يومًا من الاستلام.", "en": "Yes, within 14 days of delivery." } }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        }
+    ],
+    "templates": {
+        "product": { "before": [], "after": [] },
+        "cart": { "before": [], "after": [] },
+        "collection": { "before": [], "after": [] }
+    }
+}

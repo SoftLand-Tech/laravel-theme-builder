@@ -1,0 +1,14 @@
+/*
+ * Saudi Riyal sign (U+20C1, assigned in Unicode 17.0). No shipped UI face covers it —
+ * so prices would render as tofu without this. The face is scoped by unicode-range to
+ * that single codepoint. Font: emran-alhaddad/Saudi-Riyal-Font, OFL-1.1 (see OFL.txt).
+ */
+@font-face {
+    font-family: 'Saudi Riyal';
+    src:
+        url('/fonts/saudi-riyal/saudi_riyal.woff2') format('woff2'),
+        url('/fonts/saudi-riyal/saudi_riyal.woff') format('woff');
+    unicode-range: U+20C1;
+    size-adjust: 145%;
+    font-display: swap;
+}

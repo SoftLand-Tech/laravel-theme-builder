@@ -1,0 +1,52 @@
+/* The standalone editor is its own Vite entry and only loads this stylesheet,
+   so it must pull in Tailwind + the project's design tokens itself (otherwise
+   none of the builder's utility classes compile). app.css owns the platform
+   @theme tokens; the storefront token partial adds the semantic clay/paper/ink
+   utilities the block previews share with the live storefront. */
+@import './app.css';
+@import './_storefront-theme.css';
+
+/*
+ * The editor's React source lives under vendor/softland/theme-builder (a path
+ * repository, which is gitignored), so Tailwind v4's automatic content
+ * detection skips it. Scan it explicitly so the builder's utility classes
+ * (e.g. the drop indicator's bg-primary-500) actually compile.
+ */
+@source '../../vendor/softland/theme-builder/resources/js/**/*.{ts,tsx}';
+
+/* Base light theme for the builder shell so it renders correctly before React
+   mounts. */
+html,
+body {
+    background-color: #f5f5f5;
+    color: #171717;
+}
+
+/* Prevent the live-preview anchors/buttons inside the canvas from triggering
+   native navigation, and show a grab cursor while dragging. */
+.canvas-drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Minimal prose styling for the rich-text editor + RichText block preview. */
+.rte-content ul {
+    list-style: disc;
+    padding-inline-start: 1.5rem;
+    margin: 0.5rem 0;
+}
+.rte-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+.rte-content h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0.75rem 0 0.25rem;
+}
+.rte-content p {
+    margin: 0.25rem 0;
+}
+.rte-content:focus {
+    outline: none;
+}
+

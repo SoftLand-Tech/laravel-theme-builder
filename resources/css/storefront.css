@@ -1,0 +1,584 @@
+@import 'tailwindcss';
+
+@source '../views/storefront/**/*.blade.php';
+@source '../views/components/storefront/**/*.blade.php';
+@source '../views/components/product/**/*.blade.php';
+@source '../views/components/ui/**/*.blade.php';
+@source '../views/components/theme/**/*.blade.php';
+@source '../views/livewire/storefront/**/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/*
+ * Cadi — tenant storefront theme.
+ * A women's clothing boutique: warm paper neutrals, warm ink, and a single
+ * terracotta-clay accent. Editorial serif display (Cormorant Garamond) over a
+ * clean sans (Inter). Deliberately independent of the RSOF platform brand.
+ */
+@import './_storefront-theme.css';
+@import './_saudi-riyal-font.css';
+
+@theme {
+    --font-display: 'Saudi Riyal', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Saudi Riyal', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /*
+     * Alias `primary-*` onto the clay ramp so legacy block classes like
+     * `bg-primary-700` resolve to the merchant's theme color (clay is
+     * overridden at runtime by Theme::cssVarsFromSettings). Without this,
+     * `primary-*` utilities aren't compiled for the storefront at all.
+     */
+    --color-primary: var(--color-clay-500);
+    --color-primary-50: var(--color-clay-50);
+    --color-primary-100: var(--color-clay-100);
+    --color-primary-200: var(--color-clay-200);
+    --color-primary-300: var(--color-clay-300);
+    --color-primary-400: var(--color-clay-400);
+    --color-primary-500: var(--color-clay-500);
+    --color-primary-600: var(--color-clay-600);
+    --color-primary-700: var(--color-clay-700);
+    --color-primary-800: var(--color-clay-800);
+    --color-primary-900: var(--color-clay-900);
+    --color-primary-950: var(--color-clay-900);
+}
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+        background-color: var(--color-paper);
+        color: var(--color-ink);
+    }
+
+    body {
+        font-feature-settings: 'liga' 1, 'calt' 1;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .font-display {
+        font-family: var(--font-display);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+
+    .font-display {
+        letter-spacing: 0;
+    }
+}
+
+/*
+ * Theme toggle classes (applied on <body> by Theme::storefrontBodyClass()).
+ * These are the storefront effect of the builder's "what to show" settings.
+ */
+
+/* Product card border (product_card.border / effects.product_border). */
+.has-product-border .product-card {
+    border: 1px solid var(--color-line);
+}
+
+/* Shine sweep on hover (effects.shine_animation). */
+.with-shine .product-card {
+    position: relative;
+    overflow: hidden;
+}
+.with-shine .product-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+.with-shine .product-card:hover::after {
+    transform: translateX(120%);
+}
+
+/* Sticky purchase bar on desktop PDP (product_page.sticky_purchase_bar). */
+@media (min-width: 1024px) {
+    .sticky-purchase-bar .pdp-actions {
+        position: sticky;
+        bottom: 0;
+        top: 0;
+        align-self: flex-start;
+    }
+}
+
+/* Free-shipping progress bar (cart.free_shipping_bar). */
+.has-free-shipping-bar .free-shipping-bar {
+    display: block;
+}
+.free-shipping-bar {
+    display: none;
+}
+
+
+/*
+ * Merchant-authored HTML (RichText / ImageWithText / CollapsibleContent block
+ * bodies). @tailwindcss/typography is not a dependency, so `prose` compiles to
+ * nothing — this is the storefront's own minimal, token-driven equivalent. It
+ * styles descendants only, so the caller still owns size and color.
+ */
+@utility rich-text {
+    & p {
+        margin-block: 0.75em;
+    }
+
+    & h2, & h3, & h4 {
+        color: var(--color-ink);
+        margin-block: 1.25em 0.4em;
+    }
+
+    & h2 {
+        font-size: var(--text-h3);
+        line-height: var(--text-h3--line-height);
+    }
+
+    & h3, & h4 {
+        font-size: var(--text-h4);
+        line-height: var(--text-h4--line-height);
+    }
+
+    & ul, & ol {
+        padding-inline-start: 1.5rem;
+        margin-block: 0.75em;
+    }
+
+    & ul {
+        list-style: disc;
+    }
+
+    & ol {
+        list-style: decimal;
+    }
+
+    & a {
+        color: var(--color-clay-700);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    & strong {
+        color: var(--color-ink);
+        font-weight: 600;
+    }
+
+    & > :first-child {
+        margin-block-start: 0;
+    }
+
+    & > :last-child {
+        margin-block-end: 0;
+    }
+}
+
+/* Alpine: hide x-cloak elements (e.g. the auth modal) until Alpine initialises. */
+[x-cloak] {
+    display: none !important;
+}
+
+/*
+ * Checkout uses crisp panels instead of soft elevation so low-contrast
+ * merchant palettes (similar background + surface) do not look muddy.
+ */
+.storefront-checkout {
+    -webkit-font-smoothing: auto;
+    text-rendering: optimizeLegibility;
+
+    --checkout-panel-bg: color-mix(in srgb, var(--color-paper) 90%, var(--color-ink) 10%);
+    --checkout-panel-border: color-mix(in srgb, var(--color-ink) 20%, transparent);
+    --checkout-muted: color-mix(in srgb, var(--color-ink) 58%, var(--color-paper) 42%);
+    --checkout-link: color-mix(in srgb, var(--color-ink) 78%, var(--color-clay-700) 22%);
+    --checkout-accent: var(--header-accent, var(--color-clay-600));
+    --checkout-accent-surface: color-mix(in srgb, var(--checkout-accent) 10%, var(--color-paper) 90%);
+    --checkout-accent-border: color-mix(in srgb, var(--checkout-accent) 45%, var(--color-line) 55%);
+}
+
+.storefront-checkout .checkout-intro__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-intro__title {
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-intro__subtitle {
+    margin-top: 0.375rem;
+    max-width: 36ch;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-panel {
+    background-color: var(--checkout-panel-bg);
+    border: 1px solid var(--checkout-panel-border);
+    box-shadow: none;
+}
+
+.storefront-checkout .checkout-summary-total {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-summary-breakdown__row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+}
+
+.storefront-checkout .checkout-summary-breakdown__row span:last-child {
+    min-width: 4.5rem;
+    text-align: end;
+}
+
+.storefront-checkout .checkout-summary-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    max-width: 17rem;
+}
+
+.storefront-checkout .checkout-summary-coupon-form {
+    width: 100%;
+    max-width: 17rem;
+    font-size: 0.875rem;
+}
+
+.storefront-checkout .checkout-coupon-applied {
+    margin-top: 0.75rem;
+    width: 100%;
+    max-width: 17rem;
+    border-radius: var(--radius-cadi, 0.75rem);
+    background-color: var(--color-paper-deep);
+    padding: 0.75rem 0.875rem;
+    text-align: end;
+}
+
+.storefront-checkout .checkout-coupon-applied__code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-coupon-applied__detail {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-coupon-applied__saving {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-clay-700);
+}
+
+.storefront-checkout .checkout-coupon-applied__remove {
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-red-600, #dc2626);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 150ms ease;
+}
+
+.storefront-checkout .checkout-coupon-applied__remove:hover {
+    color: var(--color-red-700, #b91c1c);
+}
+
+.storefront-checkout .checkout-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.storefront-checkout .checkout-line--item {
+    align-items: flex-start;
+}
+
+.storefront-checkout .checkout-line + .checkout-line {
+    border-top: 1px solid var(--color-line);
+}
+
+.storefront-checkout .checkout-line__amount {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-line__label {
+    min-width: 0;
+    color: color-mix(in srgb, var(--color-ink) 72%, var(--color-paper) 28%);
+}
+
+.storefront-checkout .checkout-section__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+    .storefront-checkout .checkout-section__head {
+        gap: 1rem;
+    }
+}
+
+.storefront-checkout .checkout-section__step {
+    display: flex;
+    height: 2rem;
+    width: 2rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--checkout-accent-surface);
+    border: 1px solid var(--checkout-accent-border);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--checkout-accent) 85%, var(--color-ink) 15%);
+}
+
+.storefront-checkout .checkout-section__title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-section__hint {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-section__actions {
+    flex-shrink: 0;
+}
+
+.storefront-checkout .checkout-section--locked {
+    opacity: 0.52;
+    pointer-events: none;
+}
+
+.storefront-checkout .checkout-callout {
+    border-bottom: 1px solid var(--checkout-panel-border);
+    background-color: var(--checkout-accent-surface);
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--color-ink) 78%, var(--color-paper) 22%);
+}
+
+.storefront-checkout .checkout-choice {
+    display: flex;
+    cursor: pointer;
+    align-items: flex-start;
+    gap: 0.75rem;
+    border-radius: var(--radius-cadi, 0.75rem);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-paper);
+    padding: 1rem;
+    transition:
+        background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.storefront-checkout .checkout-choice:hover {
+    background-color: var(--color-paper-deep);
+}
+
+.storefront-checkout .checkout-choice--selected {
+    border-color: var(--checkout-accent-border);
+    background-color: var(--checkout-accent-surface);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--checkout-accent) 35%, transparent);
+}
+
+.storefront-checkout .checkout-choice--inline {
+    align-items: center;
+}
+
+.storefront-checkout .checkout-account {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    border-radius: var(--radius-cadi, 0.75rem);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-paper);
+    padding: 1rem;
+}
+
+.storefront-checkout .checkout-account__avatar {
+    display: flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--color-paper-deep);
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-shipping-note {
+    border-radius: var(--radius-cadi, 0.75rem);
+    border: 1px solid var(--color-line);
+    background-color: color-mix(in srgb, var(--color-paper-deep) 70%, var(--color-paper) 30%);
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-muted {
+    color: var(--checkout-muted);
+}
+
+.storefront-checkout .checkout-link {
+    color: var(--checkout-link);
+}
+
+.storefront-checkout .checkout-link:hover {
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-order-details-chevron.is-open {
+    transform: rotate(180deg);
+}
+
+.storefront-checkout .checkout-order-details-panel {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .storefront-checkout .checkout-choice {
+        transition: none;
+    }
+}
+
+.storefront-checkout input[type='text'],
+.storefront-checkout input[type='tel'],
+.storefront-checkout textarea {
+    background-color: var(--color-paper);
+    border-color: var(--color-line-strong);
+}
+
+.storefront-checkout .checkout-payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.storefront-checkout .checkout-payment-options > li {
+    width: 100%;
+    min-width: 0;
+}
+
+.storefront-checkout .checkout-payment-option {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.875rem;
+    cursor: pointer;
+    border-radius: var(--radius-cadi, 0.75rem);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-paper);
+    padding: 1rem 1.25rem;
+    text-align: start;
+    transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.storefront-checkout .checkout-payment-option:hover {
+    background-color: var(--color-paper-deep);
+}
+
+.storefront-checkout .checkout-payment-option--selected,
+.storefront-checkout .checkout-payment-option:has(:checked),
+.storefront-checkout .checkout-payment-option--focus:has(:focus-visible) {
+    border-color: var(--checkout-accent-border);
+    background-color: var(--checkout-accent-surface);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--checkout-accent) 35%, transparent);
+}
+
+.storefront-checkout .checkout-payment-option__icon {
+    display: flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--checkout-accent) 12%, var(--color-paper) 88%);
+    color: color-mix(in srgb, var(--checkout-accent) 85%, var(--color-ink) 15%);
+}
+
+.storefront-checkout .checkout-payment-option__label {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink);
+}
+
+.storefront-checkout .checkout-payment-option__selected-mark {
+    display: flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: var(--color-paper);
+    background-color: transparent;
+    opacity: 0;
+    transition:
+        opacity 150ms ease,
+        background-color 150ms ease;
+}
+
+.storefront-checkout .checkout-payment-option:has(:checked) .checkout-payment-option__selected-mark {
+    opacity: 1;
+    background-color: var(--checkout-accent);
+}
+
+/*
+ * Keep Google Maps UI inside a low stacking context so it does not paint over
+ * the sticky header while scrolling.
+ */
+.address-location-map {
+    isolation: isolate;
+}
+
+/*
+ * Storefront overlay stacking (low → high): page content, sticky header (z-40),
+ * toasts (z-50), modals (z-[100] in layout components).
+ */
