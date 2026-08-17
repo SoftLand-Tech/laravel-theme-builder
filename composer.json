@@ -1,5 +1,5 @@
 {
-    "name": "softland/theme-builder",
+    "name": "softlandtech/theme-builder",
     "description": "A framework-agnostic-ish Laravel + React visual theme builder and storefront block renderer. No Filament, no Spatie, no domain-model coupling.",
     "type": "library",
     "license": "MIT",
