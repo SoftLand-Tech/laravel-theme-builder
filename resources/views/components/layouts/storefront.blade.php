@@ -47,14 +47,22 @@
         {!! $schemeRules !!}
     </style>
     @php
-        $themeCssUrl = ($theme ?? Theme::active())?->themeCssAssetUrl();
+        $activeTheme = $theme ?? Theme::active();
+        $themeCssUrl = $activeTheme?->themeCssAssetUrl();
+        $scopeClass = $activeTheme?->themeScopeClass() ?? '';
     @endphp
     @if ($themeCssUrl)
         <link rel="stylesheet" href="{{ $themeCssUrl }}">
     @endif
+
+    {{-- Alpine.js powers the storefront's interactive blocks (ProductsTabs tab
+         switching, Countdown, etc.). `defer` so it boots after this document is
+         parsed — i.e. after the alpine:init listener near </body> registers. --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"></script>
+
     @stack('head')
 </head>
-<body {{ $attributes->class([$bodyClass, $themeBodyClass ?? '']) }}>
+<body {{ $attributes->class([$bodyClass, $themeBodyClass ?? '', $scopeClass]) }}>
     {{ $slot }}
 
     {{-- Alpine plugin: countdown timer for the Countdown block. Requires Alpine

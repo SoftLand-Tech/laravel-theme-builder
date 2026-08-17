@@ -441,6 +441,24 @@ const DICT: Record<string, { ar: string; en: string }> = {
     'Use major for a substantial redesign or rebuild.': { ar: 'استخدم «رئيسي» لإعادة تصميم أو بناء جوهري.', en: 'Use major for a substantial redesign or rebuild.' },
     'Use minor for everyday edits and content changes.': { ar: 'استخدم «فرعي» للتعديلات اليومية وتغييرات المحتوى.', en: 'Use minor for everyday edits and content changes.' },
     'You have unpublished changes. Update the live store when you are ready.': { ar: 'لديك تغييرات غير منشورة. حدّث المتجر المباشر عند الاستعداد.', en: 'You have unpublished changes. Update the live store when you are ready.' },
+    // Newsletter block
+    Newsletter: { ar: 'النشرة البريدية', en: 'Newsletter' },
+    'Button text': { ar: 'نص الزر', en: 'Button text' },
+    Placeholder: { ar: 'النص التجريبي', en: 'Placeholder' },
+    Layout: { ar: 'التخطيط', en: 'Layout' },
+    Centered: { ar: 'في الوسط', en: 'Centered' },
+    Start: { ar: 'في البداية', en: 'Start' },
+    End: { ar: 'في النهاية', en: 'End' },
+    // BentoHero + DiscountBanners blocks
+    BentoHero: { ar: 'بانر بينتو', en: 'Bento hero' },
+    DiscountBanners: { ar: 'بانرات الخصم', en: 'Discount banners' },
+    Eyebrow: { ar: 'نص علوي', en: 'Eyebrow' },
+    Tag: { ar: 'وسم', en: 'Tag' },
+    Discount: { ar: 'الخصم', en: 'Discount' },
+    'Left banner': { ar: 'البانر الأيسر', en: 'Left banner' },
+    'Right banner': { ar: 'البانر الأيمن', en: 'Right banner' },
+    // CompactRow block
+    CompactRow: { ar: 'صف منتجات مختصرة', en: 'Compact product row' },
 };
 
 export function useT() {

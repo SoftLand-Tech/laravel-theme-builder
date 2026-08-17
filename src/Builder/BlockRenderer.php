@@ -81,6 +81,12 @@ class BlockRenderer
             'ProductsGrid', 'ProductsCarousel' => [
                 'products' => $this->provider->products($props),
             ],
+            'BentoHero' => [
+                'bentoProducts' => $this->provider->products($props),
+            ],
+            'CompactRow' => [
+                'compactProducts' => $this->provider->products($props),
+            ],
             'ProductsTabs' => [
                 'tabProducts' => $this->provider->productsForTabs($props),
             ],

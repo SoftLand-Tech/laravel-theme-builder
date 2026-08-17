@@ -1,18 +1,40 @@
-/* The standalone editor is its own Vite entry and only loads this stylesheet,
-   so it must pull in Tailwind + the project's design tokens itself (otherwise
-   none of the builder's utility classes compile). app.css owns the platform
-   @theme tokens; the storefront token partial adds the semantic clay/paper/ink
-   utilities the block previews share with the live storefront. */
-@import './app.css';
+/*
+ * The standalone editor is its own Vite entry and loads ONLY this stylesheet.
+ * It is deliberately SELF-CONTAINED: it brings its own Tailwind build + the
+ * shared storefront design tokens + the builder's own `primary` accent, and
+ * does NOT import the host app's stylesheet. Importing the host app.css would
+ * pull host-specific styles in (e.g. Flux/Filament) that override the editor
+ * shell's buttons and layout, and the host theme typically doesn't define the
+ * `primary` ramp the editor's buttons rely on. The editor's appearance is
+ * therefore identical regardless of the host project.
+ */
+@import 'tailwindcss';
 @import './_storefront-theme.css';
 
 /*
  * The editor's React source lives under vendor/softland/theme-builder (a path
  * repository, which is gitignored), so Tailwind v4's automatic content
  * detection skips it. Scan it explicitly so the builder's utility classes
- * (e.g. the drop indicator's bg-primary-500) actually compile.
+ * actually compile.
  */
 @source '../../vendor/softland/theme-builder/resources/js/**/*.{ts,tsx}';
+
+@theme {
+    /* The builder shell's fixed accent ramp — independent of any host theme. */
+    --color-primary-50: #eef2ff;
+    --color-primary-100: #e0e7ff;
+    --color-primary-200: #c7d2fe;
+    --color-primary-300: #a5b4fc;
+    --color-primary-400: #818cf8;
+    --color-primary-500: #6366f1;
+    --color-primary-600: #4f46e5;
+    --color-primary-700: #4338ca;
+    --color-primary-800: #3730a3;
+    --color-primary-900: #312e81;
+    --color-primary: var(--color-primary-600);
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
 
 /* Base light theme for the builder shell so it renders correctly before React
    mounts. */
@@ -35,7 +57,7 @@ body {
     margin: 0.5rem 0;
 }
 .rte-content a {
-    color: var(--color-primary);
+    color: var(--color-primary-600);
     text-decoration: underline;
 }
 .rte-content h2 {
@@ -49,4 +71,3 @@ body {
 .rte-content:focus {
     outline: none;
 }
-

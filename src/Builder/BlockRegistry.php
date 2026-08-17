@@ -502,6 +502,71 @@ final class BlockRegistry
                     'visibleOnDesktop' => true,
                     'visibleOnMobile' => true,
                 ]),
+
+            BlockDefinition::make('Newsletter', 'Newsletter signup', BlockCategory::Marketing)
+                ->blade("{$prefix}.newsletter")
+                ->icon('heroicon-o-envelope')
+                ->defaults([
+                    ...$section,
+                    'title' => ['ar' => 'اشترك في نشرتنا البريدية', 'en' => 'Subscribe to our newsletter'],
+                    'subtitle' => ['ar' => 'انضم لقائمتنا واحصل على عروض حصرية وأحدث المنتجات.', 'en' => 'Join our list for exclusive offers and the latest gear.'],
+                    'placeholder' => ['ar' => 'بريدك الإلكتروني', 'en' => 'Your email'],
+                    'ctaText' => ['ar' => 'اشترك', 'en' => 'Subscribe'],
+                    'layout' => 'center',
+                    'visibleOnDesktop' => true,
+                    'visibleOnMobile' => true,
+                ]),
+
+            BlockDefinition::make('BentoHero', 'Bento hero', BlockCategory::Hero)
+                ->blade("{$prefix}.bento-hero")
+                ->icon('heroicon-o-rectangle-group')
+                ->defaults([
+                    ...$section,
+                    'eyebrow' => ['ar' => 'مميّز', 'en' => 'Featured'],
+                    'ctaText' => ['ar' => 'تسوق الآن', 'en' => 'Shop now'],
+                    'source' => 'latest',
+                    'categoryId' => null,
+                    'productIds' => [],
+                    'limit' => 6,
+                    'visibleOnDesktop' => true,
+                    'visibleOnMobile' => true,
+                ]),
+
+            BlockDefinition::make('DiscountBanners', 'Discount banners', BlockCategory::Banners)
+                ->blade("{$prefix}.discount-banners")
+                ->icon('heroicon-o-tag')
+                ->defaults([
+                    ...$section,
+                    'leftMeta' => ['ar' => 'هذا الأسبوع فقط', 'en' => 'THIS WEEK ONLY'],
+                    'leftTitle' => ['ar' => 'خصومات ضخمة', 'en' => 'Mega Discounts'],
+                    'leftPct' => ['ar' => 'خصم 50%', 'en' => '50% Off'],
+                    'leftCta' => ['ar' => 'تسوق الآن', 'en' => 'Shop now'],
+                    'leftImage' => null,
+                    'leftUrl' => '',
+                    'rightMeta' => ['ar' => 'إصدار محدود', 'en' => 'LIMITED EDITION'],
+                    'rightTitle' => ['ar' => 'سماعات استوديو برو', 'en' => 'Studio Buds Pro'],
+                    'rightPct' => ['ar' => 'خصم 30%', 'en' => '30% Off'],
+                    'rightCta' => ['ar' => 'تسوق الآن', 'en' => 'Shop now'],
+                    'rightImage' => null,
+                    'rightUrl' => '',
+                    'visibleOnDesktop' => true,
+                    'visibleOnMobile' => true,
+                ]),
+
+            BlockDefinition::make('CompactRow', 'Compact product row', BlockCategory::Products)
+                ->blade("{$prefix}.compact-row")
+                ->icon('heroicon-o-rectangle-stack')
+                ->defaults([
+                    ...$section,
+                    'title' => ['ar' => 'مختارات لك', 'en' => 'Just for you'],
+                    'ctaText' => ['ar' => 'اطلب الآن', 'en' => 'Order now'],
+                    'source' => 'latest',
+                    'categoryId' => null,
+                    'productIds' => [],
+                    'limit' => 4,
+                    'visibleOnDesktop' => true,
+                    'visibleOnMobile' => true,
+                ]),
         ];
 
         foreach ($blocks as $block) {

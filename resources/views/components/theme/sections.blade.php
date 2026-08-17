@@ -50,6 +50,8 @@
                 :component="$block['component']"
                 :props="$block['props']"
                 :products="$block['products'] ?? null"
+                :bentoProducts="$block['bentoProducts'] ?? null"
+                :compactProducts="$block['compactProducts'] ?? null"
                 :tabProducts="$block['tabProducts'] ?? null"
                 :categories="$block['categories'] ?? null"
                 :categoryLinks="$block['categoryLinks'] ?? null"
