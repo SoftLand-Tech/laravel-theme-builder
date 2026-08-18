@@ -13,7 +13,7 @@ use SoftLand\ThemeBuilder\Support\NullStorefrontDataProvider;
 it('registers all core block types', function (): void {
     $registry = app(BlockRegistry::class);
 
-    expect($registry->all())->toHaveCount(28)
+    expect($registry->all())->toHaveCount(32)
         ->and($registry->has('Hero'))->toBeTrue()
         ->and($registry->has('ProductsGrid'))->toBeTrue()
         ->and($registry->has('CustomHtml'))->toBeTrue()
@@ -63,6 +63,18 @@ it('binds a null storefront data provider by default', function (): void {
         ->and($provider->categories([]))->toBe([])
         ->and($provider->featuredProduct([]))->toBeNull()
         ->and($provider->searchProducts(null))->toBe([]);
+});
+
+it('renders a block tree to HTML via the component view path', function (): void {
+    $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+
+    $renderer = app(BlockRenderer::class);
+
+    $html = $renderer->render([
+        ['type' => 'Hero', 'props' => ['title' => ['ar' => 'أهلا', 'en' => 'Hello']]],
+    ]);
+
+    expect($html)->toContain('Hello');
 });
 
 it('resolves a block tree to renderable components without a provider', function (): void {

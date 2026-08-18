@@ -61,11 +61,29 @@ class BlockRenderer
     {
         return $this->resolve($blocks, $theme)
             ->map(function (array $resolved): string {
-                $view = view($resolved['component'], $resolved);
+                $view = view(self::viewNameFor($resolved['component']), $resolved);
 
                 return $view instanceof View ? $view->render() : (string) $view;
             })
             ->join('');
+    }
+
+    /**
+     * The resolved `component` values are Blade component names (consumed by
+     * `<x-dynamic-component>`), e.g. `theme-builder::storefront.blocks.hero`.
+     * Anonymous components live under `resources/views/components/…`, so the
+     * equivalent plain view name inserts `components.` after the namespace:
+     * `theme-builder::components.storefront.blocks.hero`.
+     */
+    public static function viewNameFor(string $component): string
+    {
+        if (! str_contains($component, '::')) {
+            return 'components.'.$component;
+        }
+
+        [$namespace, $name] = explode('::', $component, 2);
+
+        return "{$namespace}::components.{$name}";
     }
 
     /**

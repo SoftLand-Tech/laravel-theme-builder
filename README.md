@@ -1,4 +1,4 @@
-# softland/theme-builder
+# softlandtech/theme-builder
 
 A standalone **visual theme builder** (React + `@dnd-kit` drag-and-drop editor) and
 **storefront block renderer** for Laravel. A merchant opens the builder, edits their
@@ -6,7 +6,7 @@ storefront in a drag-and-drop editor, and **publish** makes it live.
 
 - **No Filament. No Spatie. No domain-model coupling.** Only Laravel + the React/TS
   editor + Tailwind CSS.
-- The host supplies catalog data and tenant info through **PHP interfaces** — the
+- The host supplies catalog data and tenant info through **PHP interfaces** - the
   package never assumes your table names, column names, or Store model.
 - Schema (tables/columns), tenant data, and routes are all **configurable + overridable**
   via interfaces, service providers, and a publishable config.
@@ -26,7 +26,7 @@ storefront in a drag-and-drop editor, and **publish** makes it live.
 ## Install
 
 ```bash
-composer require softland/theme-builder
+composer require softlandtech/theme-builder
 ```
 
 The service provider (`SoftLand\ThemeBuilder\ThemeBuilderServiceProvider`) and the
@@ -36,7 +36,7 @@ The service provider (`SoftLand\ThemeBuilder\ThemeBuilderServiceProvider`) and t
 > package): add to your app's `composer.json`:
 > ```json
 > "repositories": [{ "type": "path", "url": "path/to/laravel-theme-builder", "options": { "symlink": true } }],
-> "require":     { "softland/theme-builder": "dev-main" }
+> "require":     { "softlandtech/theme-builder": "dev-main" }
 > ```
 > and set `"minimum-stability": "dev"` (with `"prefer-stable": true`).
 
@@ -53,7 +53,7 @@ php artisan theme-builder:seed-preset                      # seed the generic "d
 ```
 
 > If your app already has a `themes` table with the same shape, **skip** the migration
-> publish — just point the package at it via the `db` config (see *Schema* below).
+> publish - just point the package at it via the `db` config (see *Schema* below).
 
 ---
 
@@ -69,7 +69,7 @@ laravel({
         // ...your existing entries...
         'resources/css/storefront.css',
         'resources/css/builder.css',
-        'vendor/softland/theme-builder/resources/js/builder/main.tsx', // ← editor
+        'vendor/softlandtech/theme-builder/resources/js/builder/main.tsx', // ← editor
     ],
     // ...
 }),
@@ -86,7 +86,7 @@ resolve: { preserveSymlinks: true },
 line to `resources/css/storefront.css` so its utility classes compile:
 
 ```css
-@source '../vendor/softland/theme-builder/resources/views/**/*.blade.php';
+@source '../vendor/softlandtech/theme-builder/resources/views/**/*.blade.php';
 ```
 
 > Skip step 3 if you point the package at **your own** block views via
@@ -143,12 +143,28 @@ prints `!` warnings for anything that will fall back to defaults.
 
 ---
 
+## Testing
+
+```bash
+composer test      # run the Pest suite (Testbench + in-memory SQLite)
+composer lint      # Laravel Pint in test mode (no changes)
+composer format    # fix code style with Laravel Pint
+```
+
+The suite covers the block registry (every registered block resolves to a real
+Blade component), the Theme model (defaults, draft overlay, promotion,
+activation, preset forking), the builder HTTP endpoints (save/publish/promote/
+restore, tenant isolation, validation), storefront rendering, and the
+`theme-builder:validate` command.
+
+---
+
 ## AI assistant integration (Laravel Boost)
 
 The package ships a **Boost guideline** (`resources/boost/guidelines/core.blade.php`)
 and an **agent skill** (`resources/boost/skills/theme-builder/SKILL.md`) using Boost's
 [first-party third-party-package hook](https://laravel.com/docs/13.x/boost#third-party-package-ai-guidelines).
-Boost **auto-discovers** them — no manual publish needed:
+Boost **auto-discovers** them - no manual publish needed:
 
 ```bash
 composer require laravel/boost --dev
@@ -170,13 +186,13 @@ After `boost:install`:
 > ```
 
 So you can install + configure the package **either manually** (following the sections
-above) **or by asking your AI agent** — the skill knows every step.
+above) **or by asking your AI agent** - the skill knows every step.
 
 ---
 
-## Provide tenant data — the `Store` interface
+## Provide tenant data - the `Store` interface
 
-The package reads tenant data **only** through an interface — never by assuming your
+The package reads tenant data **only** through an interface - never by assuming your
 `Store` model's columns. Implement it on your tenant model:
 
 ```php
@@ -204,7 +220,7 @@ config([
 
 - Multi-tenant: return the current `Store` (or null). The package derives the tenant
   key, store name, currency, and locale from it.
-- Single-tenant: leave `store_resolver` null — the bundled `NullStore` is used and
+- Single-tenant: leave `store_resolver` null - the bundled `NullStore` is used and
   the storefront renders the default preset.
 
 > The package resolves the store **fresh on every access**, so route-model binding
@@ -213,7 +229,7 @@ config([
 
 ---
 
-## Provide catalog data — the `StorefrontDataProvider` interface
+## Provide catalog data - the `StorefrontDataProvider` interface
 
 Block types that show products/categories/blog pull data through a contract, so the
 package ships no Product models. Implement and bind it:
@@ -247,10 +263,10 @@ $this->app->bind(
 
 Value shapes are documented in the interface docblock. `featuredProduct()` and
 `blogPost()` return `mixed` (a normalized array by default, or your own model if you
-keep your own block views — see *Block views*).
+keep your own block views - see *Block views*).
 
 Without a provider, static blocks (Hero, Banners, FAQ, …) render normally and
-product/category/blog blocks render empty — the bundled `NullStorefrontDataProvider`
+product/category/blog blocks render empty - the bundled `NullStorefrontDataProvider`
 never throws.
 
 ### Media (optional)
@@ -260,7 +276,7 @@ editor's media picker (`list`, `store`, `url`). Default is a null provider.
 
 ---
 
-## Schema — tables & columns are configurable
+## Schema - tables & columns are configurable
 
 The package's `themes` / `theme_revisions` tables and the owning **tenant column**
 are not hardcoded. Three ways to adapt, in order of simplicity:
@@ -303,13 +319,13 @@ The renderer registers each block under `theme-builder.blocks_view_prefix`
 - **Use the bundled blocks**: keep the default. Add the `@source` line above.
 - **Use your own blocks** (e.g. an app being migrated onto the package): set
   `'blocks_view_prefix' => 'storefront.blocks'` and the renderer resolves *your*
-  views — no file moves.
+  views - no file moves.
 
 Override a single block by publishing a view to
 `resources/views/vendor/theme-builder/components/storefront/blocks/<kebab>.blade.php`.
 
 Per-theme component/header/footer overrides follow the convention
-`resources/views/components/themes/{slug}/…` (file existence is the signal — no
+`resources/views/components/themes/{slug}/…` (file existence is the signal - no
 registration). A packaged theme stylesheet goes at `public/themes/{slug}/theme.css`.
 
 ---
@@ -344,7 +360,7 @@ prefix, falls back to `#`).
 ## Quickstart (single-tenant)
 
 ```bash
-composer require softland/theme-builder
+composer require softlandtech/theme-builder
 php artisan vendor:publish --tag=theme-builder-config
 php artisan vendor:publish --tag=theme-builder-assets
 php artisan vendor:publish --tag=theme-builder-migrations

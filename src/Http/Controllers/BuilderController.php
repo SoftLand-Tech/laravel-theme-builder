@@ -147,10 +147,12 @@ class BuilderController extends Controller
     private function validatePayload(Request $request): array
     {
         $data = $request->validate([
-            // `present` (not `required`) so merchants can delete every home block.
+            // `present` (not `required`) so merchants can delete every home
+            // block, and `props` may be an empty object (a block whose every
+            // field is at its default).
             'blocks' => ['present', 'array'],
             'blocks.*.type' => ['required', 'string'],
-            'blocks.*.props' => ['required', 'array'],
+            'blocks.*.props' => ['present', 'array'],
             'settings' => ['sometimes', 'array'],
             'header' => ['sometimes', 'array'],
             'footer' => ['sometimes', 'array'],
@@ -158,24 +160,24 @@ class BuilderController extends Controller
             'templates.product' => ['sometimes', 'array'],
             'templates.product.before' => ['sometimes', 'array'],
             'templates.product.before.*.type' => ['required_with', 'string'],
-            'templates.product.before.*.props' => ['required_with', 'array'],
+            'templates.product.before.*.props' => ['present', 'array'],
             'templates.product.after' => ['sometimes', 'array'],
             'templates.product.after.*.type' => ['required_with', 'string'],
-            'templates.product.after.*.props' => ['required_with', 'array'],
+            'templates.product.after.*.props' => ['present', 'array'],
             'templates.cart' => ['sometimes', 'array'],
             'templates.cart.before' => ['sometimes', 'array'],
             'templates.cart.before.*.type' => ['required_with', 'string'],
-            'templates.cart.before.*.props' => ['required_with', 'array'],
+            'templates.cart.before.*.props' => ['present', 'array'],
             'templates.cart.after' => ['sometimes', 'array'],
             'templates.cart.after.*.type' => ['required_with', 'string'],
-            'templates.cart.after.*.props' => ['required_with', 'array'],
+            'templates.cart.after.*.props' => ['present', 'array'],
             'templates.collection' => ['sometimes', 'array'],
             'templates.collection.before' => ['sometimes', 'array'],
             'templates.collection.before.*.type' => ['required_with', 'string'],
-            'templates.collection.before.*.props' => ['required_with', 'array'],
+            'templates.collection.before.*.props' => ['present', 'array'],
             'templates.collection.after' => ['sometimes', 'array'],
             'templates.collection.after.*.type' => ['required_with', 'string'],
-            'templates.collection.after.*.props' => ['required_with', 'array'],
+            'templates.collection.after.*.props' => ['present', 'array'],
         ]);
 
         return $this->normalizePayload($data);
