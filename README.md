@@ -25,6 +25,8 @@ storefront in a drag-and-drop editor, and **publish** makes it live.
 
 ## Install
 
+Install the stable release from **Packagist**:
+
 ```bash
 composer require softlandtech/theme-builder
 ```
@@ -32,13 +34,19 @@ composer require softlandtech/theme-builder
 The service provider (`SoftLand\ThemeBuilder\ThemeBuilderServiceProvider`) and the
 `ThemeBuilder` facade are **auto-discovered**.
 
-> **Local development via a path repository** (e.g. while building/iterating on the
-> package): add to your app's `composer.json`:
-> ```json
-> "repositories": [{ "type": "path", "url": "path/to/laravel-theme-builder", "options": { "symlink": true } }],
-> "require":     { "softlandtech/theme-builder": "dev-main" }
-> ```
-> and set `"minimum-stability": "dev"` (with `"prefer-stable": true`).
+### Local development (path repository)
+
+> Only needed while building/iterating on the package itself. Skip this if you
+> just installed from Packagist above.
+
+Point your app at a local checkout of the package instead of Packagist:
+
+```json
+"repositories": [{ "type": "path", "url": "path/to/laravel-theme-builder", "options": { "symlink": true } }],
+"require":     { "softlandtech/theme-builder": "dev-main" }
+```
+
+and set `"minimum-stability": "dev"` (with `"prefer-stable": true`).
 
 ### Publish what you need
 
@@ -75,8 +83,9 @@ laravel({
 }),
 ```
 
-**2. If you install via a symlinked path repository**, tell Vite to preserve the
-symlink so the editor's `react`/`@dnd-kit` imports resolve from your `node_modules`:
+**2. (Only for a symlinked path-repository install - see *Install*)** tell Vite
+to preserve the symlink so the editor's `react`/`@dnd-kit` imports resolve from
+your `node_modules`:
 
 ```js
 resolve: { preserveSymlinks: true },
