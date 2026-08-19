@@ -34,20 +34,6 @@ composer require softlandtech/theme-builder
 The service provider (`SoftLand\ThemeBuilder\ThemeBuilderServiceProvider`) and the
 `ThemeBuilder` facade are **auto-discovered**.
 
-### Local development (path repository)
-
-> Only needed while building/iterating on the package itself. Skip this if you
-> just installed from Packagist above.
-
-Point your app at a local checkout of the package instead of Packagist:
-
-```json
-"repositories": [{ "type": "path", "url": "path/to/laravel-theme-builder", "options": { "symlink": true } }],
-"require":     { "softlandtech/theme-builder": "dev-main" }
-```
-
-and set `"minimum-stability": "dev"` (with `"prefer-stable": true`).
-
 ### Publish what you need
 
 ```bash
@@ -83,7 +69,7 @@ laravel({
 }),
 ```
 
-**2. (Only for a symlinked path-repository install - see *Install*)** tell Vite
+**2. (Only for a symlinked path-repository install)** tell Vite
 to preserve the symlink so the editor's `react`/`@dnd-kit` imports resolve from
 your `node_modules`:
 
