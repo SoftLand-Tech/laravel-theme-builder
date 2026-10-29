@@ -45,6 +45,6 @@ class MediaController extends Controller
             return;
         }
 
-        abort_unless($theme->store_id === $tenantId, 403);
+        abort_unless($theme->{Theme::ownerColumn()} === $tenantId, 403);
     }
 }

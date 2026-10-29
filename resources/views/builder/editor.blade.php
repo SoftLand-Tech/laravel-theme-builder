@@ -9,7 +9,7 @@
     <title>{{ __('Theme editor') }} — {{ tb_bi($theme->name) }}</title>
 
     {{-- Vite dev/build: builder CSS (Tailwind + tokens) + React entry (vendor path). --}}
-    @vite(['resources/css/builder.css', 'vendor/softland/theme-builder/resources/js/builder/main.tsx'])
+    @vite(['resources/css/builder.css', 'vendor/softlandtech/theme-builder/resources/js/builder/main.tsx'])
 </head>
 <body class="h-full bg-neutral-100 text-neutral-900 font-sans">
     <div
@@ -29,6 +29,7 @@
         data-initial-header='@json($theme->builderResolvedHeader())'
         data-initial-footer='@json($theme->builderResolvedFooter())'
         data-initial-templates='@json($theme->builderResolvedTemplates())'
+        data-pages='@json($pages ?? [])'
         data-current-version="{{ $currentVersion }}"
         data-locale="{{ app()->getLocale() }}"
     ></div>

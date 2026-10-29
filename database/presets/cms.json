@@ -1,0 +1,180 @@
+{
+    "name": {
+        "ar": "مدونة",
+        "en": "CMS"
+    },
+    "description": {
+        "ar": "ثيم المدونات والمواقع الإخبارية — مقالات، مواضيع، ونشرة بريدية.",
+        "en": "A blog/CMS starter — articles, topics, and a newsletter signup."
+    },
+    "settings": {
+        "colors": {
+            "primary": "#7C3AED",
+            "secondary": "#0F172A",
+            "accent": "#EC4899",
+            "background": "#FFFFFF",
+            "surface": "#FAF5FF",
+            "text": "#0F172A",
+            "muted": "#64748B"
+        },
+        "color_schemes": [
+            {
+                "key": "1",
+                "name": "Default",
+                "background": "#FFFFFF",
+                "surface": "#FAF5FF",
+                "text": "#0F172A",
+                "muted": "#64748B",
+                "primary": "#7C3AED",
+                "button": "#7C3AED",
+                "button_text": "#FFFFFF",
+                "accent": "#EC4899"
+            },
+            {
+                "key": "2",
+                "name": "Dark",
+                "background": "#0F172A",
+                "surface": "#1E293B",
+                "text": "#F8FAFC",
+                "muted": "#94A3B8",
+                "primary": "#A78BFA",
+                "button": "#7C3AED",
+                "button_text": "#FFFFFF",
+                "accent": "#F472B6"
+            }
+        ],
+        "typography": {
+            "heading_font": "IBM Plex Sans Arabic",
+            "body_font": "IBM Plex Sans Arabic",
+            "base_size": 16
+        },
+        "radius": {
+            "card": 12,
+            "button": 8
+        },
+        "layout": {
+            "content_width": 1152,
+            "section_rhythm": "medium"
+        }
+    },
+    "header": {
+        "logo_text": "Blog",
+        "logo_image": null,
+        "background_color": "#FFFFFF",
+        "text_color": "#0F172A",
+        "accent_color": "#7C3AED",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "category_count": 5,
+        "menu": [
+            { "label": { "ar": "الرئيسية", "en": "Home" }, "url": "/" },
+            { "label": { "ar": "المدونة", "en": "Blog" }, "url": "/blog" }
+        ],
+        "show_search": true,
+        "show_account": false,
+        "show_cart": false
+    },
+    "footer": {
+        "tagline": { "ar": "مقالات وأفكار جديدة كل أسبوع.", "en": "Fresh articles and ideas every week." },
+        "copyright_text": "Blog",
+        "show_links": true,
+        "background_color": "#0F172A",
+        "text_color": "#F8FAFC",
+        "muted_color": "#94A3B8",
+        "columns": [
+            {
+                "heading": { "ar": "المحتوى", "en": "Content" },
+                "links": [
+                    { "label": { "ar": "المدونة", "en": "Blog" }, "url": "/blog" },
+                    { "label": { "ar": "تواصل معنا", "en": "Contact us" }, "url": "/contact" }
+                ]
+            }
+        ],
+        "social": [
+            { "platform": "twitter", "url": "https://twitter.com/" },
+            { "platform": "facebook", "url": "https://facebook.com/" }
+        ],
+        "payment_icons": [],
+        "show_logo": true
+    },
+    "blocks": [
+        {
+            "type": "Hero",
+            "props": {
+                "sectionPaddingTop": "large",
+                "sectionPaddingBottom": "large",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "أفكار تستحق القراءة", "en": "Ideas worth reading" },
+                "subtitle": { "ar": "مقالات مختارة بعناية في التقنية والثقافة.", "en": "Curated essays on tech and culture." },
+                "backgroundImage": null,
+                "overlayOpacity": 30,
+                "height": "medium",
+                "ctaText": { "ar": "اقرأ المدونة", "en": "Read the blog" },
+                "ctaUrl": "/blog",
+                "layout": "center",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "BlogPostsGrid",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "أحدث المقالات", "en": "Latest articles" },
+                "source": "latest",
+                "postIds": [],
+                "columns": 3,
+                "mobileColumns": 1,
+                "limit": 3,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "BlogCategoriesGrid",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "تصفّح المواضيع", "en": "Browse topics" },
+                "columns": 4,
+                "limit": 8,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Newsletter",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "1",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "center",
+                "hidden": false,
+                "title": { "ar": "اشترك في النشرة البريدية", "en": "Subscribe to the newsletter" },
+                "subtitle": { "ar": "مقال جديد في بريدك كل أسبوع.", "en": "One new article in your inbox every week." },
+                "placeholder": { "ar": "بريدك الإلكتروني", "en": "Your email" },
+                "ctaText": { "ar": "اشترك", "en": "Subscribe" },
+                "layout": "center",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        }
+    ],
+    "templates": {
+        "post": { "before": [], "after": [] },
+        "page": { "before": [], "after": [] }
+    }
+}

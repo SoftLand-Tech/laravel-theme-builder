@@ -69,6 +69,29 @@ class BlockRenderer
     }
 
     /**
+     * Render one slot of a page template for the given (or active) theme.
+     * Hosts embed this around their own page content:
+     *
+     *   {!! ThemeBuilder::renderTemplate('product', 'before') !!}
+     *   …host product content…
+     *   {!! ThemeBuilder::renderTemplate('product', 'after') !!}
+     *
+     * Unknown pages/slots render as an empty string, never throw.
+     */
+    public function renderTemplate(string $page, string $slot = 'before', ?Theme $theme = null): string
+    {
+        if (! in_array($slot, ['before', 'after'], true)) {
+            return '';
+        }
+
+        $theme ??= Theme::active() ?? Theme::defaultPreset();
+
+        $blocks = $theme?->resolvedTemplates()[$page][$slot] ?? [];
+
+        return $this->render(is_array($blocks) ? $blocks : [], $theme);
+    }
+
+    /**
      * The resolved `component` values are Blade component names (consumed by
      * `<x-dynamic-component>`), e.g. `theme-builder::storefront.blocks.hero`.
      * Anonymous components live under `resources/views/components/…`, so the

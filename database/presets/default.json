@@ -52,6 +52,17 @@
             "card": 12,
             "button": 8
         },
+        "semantic": {
+            "price": null,
+            "sale": "#C0392B",
+            "instock": "#1E8E5A",
+            "lowstock": "#D08700",
+            "outofstock": null
+        },
+        "layout": {
+            "content_width": 1152,
+            "section_rhythm": "medium"
+        },
         "effects": {
             "product_border": false,
             "shine_animation": false

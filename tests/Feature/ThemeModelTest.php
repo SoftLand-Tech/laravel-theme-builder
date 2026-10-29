@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use SoftLand\ThemeBuilder\Enums\ThemeStatus;
 use SoftLand\ThemeBuilder\Models\Theme;
+use SoftLand\ThemeBuilder\Seeders\ThemePresetSeeder;
 
 uses(RefreshDatabase::class);
 
@@ -123,4 +125,19 @@ it('forks a preset into a tenant-owned draft', function (): void {
         ->and($fork->is_preset)->toBeFalse()
         ->and($fork->status)->toBe(ThemeStatus::Draft)
         ->and($fork->blocks)->toHaveCount(1);
+});
+
+it('seeds and forks through a remapped tenant column', function (): void {
+    DB::statement('ALTER TABLE themes RENAME COLUMN store_id TO tenant_id');
+    config(['theme-builder.db.tenant_column' => 'tenant_id']);
+
+    $preset = app(ThemePresetSeeder::class)->seed('personal');
+
+    expect($preset->getAttribute('tenant_id'))->toBeNull();
+
+    $fork = Theme::forkPresetForStore($preset, 42);
+    $fork->refresh();
+
+    expect($fork->getAttribute('tenant_id'))->toBe(42)
+        ->and($fork->is_preset)->toBeFalse();
 });

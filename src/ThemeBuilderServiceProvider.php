@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 use SoftLand\ThemeBuilder\Builder\BlockRegistry;
 use SoftLand\ThemeBuilder\Builder\BlockRenderer;
+use SoftLand\ThemeBuilder\Console\InstallCommand;
 use SoftLand\ThemeBuilder\Console\MakeThemeCommand;
 use SoftLand\ThemeBuilder\Console\SeedPresetCommand;
 use SoftLand\ThemeBuilder\Console\ValidateThemeCommand;
@@ -20,6 +21,7 @@ use SoftLand\ThemeBuilder\Support\DefaultThemeSchema;
 use SoftLand\ThemeBuilder\Support\NullMediaProvider;
 use SoftLand\ThemeBuilder\Support\NullStore;
 use SoftLand\ThemeBuilder\Support\NullStorefrontDataProvider;
+use SoftLand\ThemeBuilder\Support\ThemePackageManager;
 use SoftLand\ThemeBuilder\View\StorefrontViewComposers;
 
 class ThemeBuilderServiceProvider extends ServiceProvider
@@ -59,6 +61,7 @@ class ThemeBuilderServiceProvider extends ServiceProvider
 
         $this->app->singleton(BlockRegistry::class);
         $this->app->singleton(BlockRenderer::class);
+        $this->app->singleton(ThemePackageManager::class);
 
         $this->app->bind(StorefrontDataProvider::class, config('theme-builder.storefront_data_provider', NullStorefrontDataProvider::class));
         $this->app->bind(MediaProvider::class, config('theme-builder.media_provider', NullMediaProvider::class));
@@ -79,6 +82,7 @@ class ThemeBuilderServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
+                InstallCommand::class,
                 SeedPresetCommand::class,
                 MakeThemeCommand::class,
                 ValidateThemeCommand::class,

@@ -41,13 +41,34 @@ in the PHP `defaults` is silently dropped by `sanitize()` on save.
 ## Commands
 
 ```bash
-php artisan theme-builder:make-theme {slug} [--name=] [--overrides]   # scaffold a preset (+ override dirs)
+php artisan theme-builder:install [options]                            # scan app → pick themes → install + wire everything
+php artisan theme-builder:make-theme {slug} [--name=] [--from=] [--overrides]   # scaffold a preset (+ override dirs)
 php artisan theme-builder:validate [slug] [--theme=#id]                # lint a preset/theme against the contracts
 php artisan theme-builder:seed-preset [slug]                           # seed a preset into themes (is_preset=1)
 ```
 
+`install` (grep-based, no AI) detects the site type, asks about existing features
+(cart/checkout/search/account/blog/contact), installs theme packages, wires
+routes/vite/tailwind/config, and finally prints an AI hand-off prompt for the
+host-specific remainder. Prefer it over the manual checklist below.
+
 `validate` round-trips every block through the registry and checks settings/color-schemes/
 header/footer/templates. Run it after touching a preset.
+
+## Theme packages
+
+Site-type personality lives in `softlandtech/theme-builder-{personal,ecommerce,lms,cms}`
+packages: a `theme-builder.json` manifest (site_types, pages, routes_map, settings) +
+`presets/{slug}.json` + scoped `theme.css`. Each is its own public repo at
+`github.com/SoftLand-Tech/theme-builder-{slug}` and installs three ways: composer,
+plain `git clone` into the host's themes directory (config `themes_path`, default
+`theme-builder-themes/` — update with `git pull`), or directly from
+`theme-builder:install`, which lists every catalog theme (config `theme_repos`; point
+entries at forks) and clones the picked ones. `ThemePackageManager` discovers them
+from vendor, from folders beside the core package, and from the themes directory;
+their pages drive the builder's Pages tab and page-template keys (config
+`theme-builder.pages` overrides; legacy fallback product/cart/collection). Build
+custom ones by copying a package and validating.
 
 ## Contracts the host implements
 
@@ -148,7 +169,7 @@ package is a symlinked path repository** preserve symlinks so `react`/`@dnd-kit`
 from the host's `node_modules`:
 
 ```js
-laravel({ input: [/*…*/, 'vendor/softland/theme-builder/resources/js/builder/main.tsx'] }),
+laravel({ input: [/*…*/, 'vendor/softlandtech/theme-builder/resources/js/builder/main.tsx'] }),
 // …
 resolve: { preserveSymlinks: true },  // only needed for symlinked path repos
 ```
@@ -159,11 +180,11 @@ Tailwind v4 auto-detection skips. Without this the drop indicator (and other bui
 classes) are invisible:
 
 ```css
-@source '../../vendor/softland/theme-builder/resources/js/**/*.{ts,tsx}';
+@source '../../vendor/softlandtech/theme-builder/resources/js/**/*.{ts,tsx}';
 ```
 
 (If the host renders the package's bundled block *views* instead of its own, also add
-`@source '../vendor/softland/theme-builder/resources/views/**/*.blade.php';` to its
+`@source '../vendor/softlandtech/theme-builder/resources/views/**/*.blade.php';` to its
 `storefront.css`.) Then `npm install && npm run build`.
 
 ---

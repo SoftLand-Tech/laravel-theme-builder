@@ -1,9 +1,9 @@
 {
     "name": "softlandtech/theme-builder",
-    "description": "A framework-agnostic-ish Laravel + React visual theme builder and storefront block renderer. No Filament, no Spatie, no domain-model coupling.",
+    "description": "A general-purpose Laravel + React visual theme builder and storefront/site block renderer — ecommerce, LMS, CMS, or personal sites. No Filament, no Spatie, no domain-model coupling.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "theme", "builder", "storefront", "react", "ecommerce", "page-builder"],
+    "keywords": ["laravel", "theme", "builder", "storefront", "react", "ecommerce", "lms", "cms", "page-builder"],
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.0"

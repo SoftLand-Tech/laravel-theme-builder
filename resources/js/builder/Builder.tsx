@@ -23,6 +23,7 @@ import { RevisionsPanel } from './components/RevisionsPanel';
 import { ProductPagePreview } from './components/ProductPagePreview';
 import { CartPagePreview } from './components/CartPagePreview';
 import { CollectionPagePreview } from './components/CollectionPagePreview';
+import { GenericPagePreview } from './components/GenericPagePreview';
 import { SettingsForm } from './components/SettingsForm';
 import { PRODUCT_CARD_FIELDS, PRODUCT_PAGE_FIELDS, CART_FIELDS } from './config/settings';
 import { BLOCK_SCHEMAS } from './config/blocks';
@@ -35,7 +36,7 @@ import { toWire, type Block, type BlockProps } from './types/blocks';
 import { defaultSettings, type ThemeSettings } from './types/settings';
 import { HEADER_FIELDS, FOOTER_FIELDS } from './config/headerFooter';
 import { HeaderFooterPanel } from './components/HeaderFooterPanel';
-import { PagesPanel, type TemplatesShape } from './components/PagesPanel';
+import { PagesPanel, usePageLabel, type PagesMap, type TemplatesShape } from './components/PagesPanel';
 import { BlockWireframe } from './components/BlockWireframe';
 import {
     CANVAS_DROP_AREA_ID,
@@ -66,17 +67,20 @@ export interface BuilderProps {
     initialHeader?: Record<string, unknown>;
     initialFooter?: Record<string, unknown>;
     initialTemplates?: TemplatesShape;
+    /** Page templates the builder offers (from config / theme packages). */
+    pages?: PagesMap;
     currentVersion?: string;
     locale: string;
 }
 
 type SidebarTab = 'sections' | 'properties' | 'theme' | 'header-footer' | 'pages' | 'revisions';
-type Page = 'home' | 'product' | 'cart' | 'collection';
+type Page = string;
 type ActiveDrag = { source: 'palette' | 'block'; type?: string; id?: string; label?: string } | null;
 
 export function PuckBuilder(props: BuilderProps) {
     const { blocks, addBlock, removeBlock, duplicateBlock, moveBlock, reorder, reorderAt, updateProps, toggleHide } =
         useBlocks(props.initialBlocks);
+    const pageLabel = usePageLabel();
 
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [settings, setSettings] = useState<ThemeSettings>(
@@ -401,6 +405,18 @@ export function PuckBuilder(props: BuilderProps) {
                                 themeSlug={props.themeSlug}
                             />
                         )}
+                        {page !== 'home' && page !== 'product' && page !== 'cart' && page !== 'collection' && (
+                            <GenericPagePreview
+                                page={page}
+                                label={pageLabel(page, (props.pages ?? {})[page])}
+                                settings={settings}
+                                locale={locale}
+                                viewport={viewport}
+                                templates={templates}
+                                colorSchemes={settings.color_schemes}
+                                themeSlug={props.themeSlug}
+                            />
+                        )}
 
                         <Sidebar
                             page={page}
@@ -421,6 +437,7 @@ export function PuckBuilder(props: BuilderProps) {
                             onFooterChange={handleFooterChange}
                             templates={templates}
                             onTemplatesChange={handleTemplatesChange}
+                            pages={props.pages}
                             pendingInsertAt={pendingInsertAt}
                             onCancelInsertAt={cancelInsertAt}
                         />
@@ -464,6 +481,7 @@ function Sidebar({
     onFooterChange,
     templates,
     onTemplatesChange,
+    pages,
     pendingInsertAt,
     onCancelInsertAt,
 }: {
@@ -485,6 +503,7 @@ function Sidebar({
     onFooterChange: (next: Record<string, unknown>) => void;
     templates: TemplatesShape;
     onTemplatesChange: (next: TemplatesShape) => void;
+    pages?: PagesMap;
     pendingInsertAt: number | null;
     onCancelInsertAt: () => void;
 }) {
@@ -572,6 +591,7 @@ function Sidebar({
                     onPreviewPageChange={onPreviewPageChange}
                     templates={templates}
                     onChange={onTemplatesChange}
+                    pages={pages}
                 />
             )}
             {sidebarTab === 'revisions' && (

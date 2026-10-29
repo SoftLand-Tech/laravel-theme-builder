@@ -12,12 +12,12 @@
 @import './_storefront-theme.css';
 
 /*
- * The editor's React source lives under vendor/softland/theme-builder (a path
+ * The editor's React source lives under vendor/softlandtech/theme-builder (a path
  * repository, which is gitignored), so Tailwind v4's automatic content
  * detection skips it. Scan it explicitly so the builder's utility classes
  * actually compile.
  */
-@source '../../vendor/softland/theme-builder/resources/js/**/*.{ts,tsx}';
+@source '../../vendor/softlandtech/theme-builder/resources/js/**/*.{ts,tsx}';
 
 @theme {
     /* The builder shell's fixed accent ramp — independent of any host theme. */

@@ -7,18 +7,20 @@ namespace SoftLand\ThemeBuilder\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use SoftLand\ThemeBuilder\Models\Theme;
+use SoftLand\ThemeBuilder\Support\ThemePackageManager;
 
 class MakeThemeCommand extends Command
 {
     protected $signature = 'theme-builder:make-theme
         {slug : The theme slug (kebab-case; used as preset_slug and the JSON filename)}
         {--name= : Display name (default: the slug, Title-Cased)}
+        {--from= : Base the new preset on an existing one (any available preset slug, incl. theme packages)}
         {--overrides : Also scaffold per-theme override directories}
         {--force : Overwrite an existing preset}';
 
     protected $description = 'Scaffold a new theme preset (JSON) and optional override directories.';
 
-    public function handle(Filesystem $files): int
+    public function handle(Filesystem $files, ThemePackageManager $themePackages): int
     {
         $slug = (string) $this->argument('slug');
 
@@ -36,7 +38,7 @@ class MakeThemeCommand extends Command
             return self::FAILURE;
         }
 
-        $data = $this->starterPreset($files, $slug);
+        $data = $this->starterPreset($files, $themePackages, $slug);
 
         $files->ensureDirectoryExists(dirname($dest));
         $files->put(
@@ -62,25 +64,23 @@ class MakeThemeCommand extends Command
     /**
      * @return array<string, mixed>
      */
-    private function starterPreset(Filesystem $files, string $slug): array
+    private function starterPreset(Filesystem $files, ThemePackageManager $themePackages, string $slug): array
     {
-        $stubPath = dirname(__DIR__, 2).'/database/presets/default.json';
-        $data = $slug === 'default' && $files->exists($stubPath)
+        $from = (string) ($this->option('from') ?: 'default');
+        $stubPath = $themePackages->presets()[$from]
+            ?? dirname(__DIR__, 2)."/database/presets/{$from}.json";
+        $data = $files->exists($stubPath)
             ? json_decode((string) $files->get($stubPath), true)
             : null;
 
         if (! is_array($data)) {
-            // Minimal valid starter if the bundled default is unavailable.
+            // Minimal valid starter if no source preset is available.
             $data = [
                 'settings' => Theme::defaultSettings(),
                 'header' => Theme::headerDefaults(),
                 'footer' => Theme::footerDefaults(),
                 'blocks' => [],
-                'templates' => [
-                    'product' => ['before' => [], 'after' => []],
-                    'cart' => ['before' => [], 'after' => []],
-                    'collection' => ['before' => [], 'after' => []],
-                ],
+                'templates' => Theme::defaultTemplates(),
             ];
         }
 

@@ -33,6 +33,12 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         $app['config']->set('theme-builder.currency', 'SAR');
 
+        // Keep tests hermetic: don't auto-discover theme packages that happen
+        // to be checked out beside this package (dev-monorepo layout), and
+        // don't offer to git-clone catalog themes from GitHub.
+        $app['config']->set('theme-builder.discover_siblings', false);
+        $app['config']->set('theme-builder.offer_remote_themes', false);
+
         // The storefront layout calls @vite('resources/css/storefront.css');
         // fake a manifest so rendering doesn't need a frontend build.
         $app->singleton(Vite::class, function (): Vite {

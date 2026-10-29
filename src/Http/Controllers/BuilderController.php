@@ -14,11 +14,13 @@ use SoftLand\ThemeBuilder\Contracts\Store;
 use SoftLand\ThemeBuilder\Enums\ThemeStatus;
 use SoftLand\ThemeBuilder\Models\Theme;
 use SoftLand\ThemeBuilder\Models\ThemeRevision;
+use SoftLand\ThemeBuilder\Support\ThemePackageManager;
 
 class BuilderController extends Controller
 {
     public function __construct(
         private BlockRegistry $registry,
+        private ThemePackageManager $themePackages,
     ) {}
 
     /**
@@ -33,6 +35,7 @@ class BuilderController extends Controller
             'storeName' => $this->storeName(),
             'apiToken' => $this->buildApiToken($theme),
             'blockRegistry' => $this->registry->forEditor(),
+            'pages' => $this->themePackages->pages(),
             'currentVersion' => ThemeRevision::latestForTheme($theme)?->version ?? '',
         ]);
     }
@@ -146,6 +149,8 @@ class BuilderController extends Controller
      */
     private function validatePayload(Request $request): array
     {
+        // Template page keys are dynamic (config / theme packages decide which
+        // pages exist), so templates validate + normalize generically.
         $data = $request->validate([
             // `present` (not `required`) so merchants can delete every home
             // block, and `props` may be an empty object (a block whose every
@@ -157,27 +162,13 @@ class BuilderController extends Controller
             'header' => ['sometimes', 'array'],
             'footer' => ['sometimes', 'array'],
             'templates' => ['sometimes', 'array'],
-            'templates.product' => ['sometimes', 'array'],
-            'templates.product.before' => ['sometimes', 'array'],
-            'templates.product.before.*.type' => ['required_with', 'string'],
-            'templates.product.before.*.props' => ['present', 'array'],
-            'templates.product.after' => ['sometimes', 'array'],
-            'templates.product.after.*.type' => ['required_with', 'string'],
-            'templates.product.after.*.props' => ['present', 'array'],
-            'templates.cart' => ['sometimes', 'array'],
-            'templates.cart.before' => ['sometimes', 'array'],
-            'templates.cart.before.*.type' => ['required_with', 'string'],
-            'templates.cart.before.*.props' => ['present', 'array'],
-            'templates.cart.after' => ['sometimes', 'array'],
-            'templates.cart.after.*.type' => ['required_with', 'string'],
-            'templates.cart.after.*.props' => ['present', 'array'],
-            'templates.collection' => ['sometimes', 'array'],
-            'templates.collection.before' => ['sometimes', 'array'],
-            'templates.collection.before.*.type' => ['required_with', 'string'],
-            'templates.collection.before.*.props' => ['present', 'array'],
-            'templates.collection.after' => ['sometimes', 'array'],
-            'templates.collection.after.*.type' => ['required_with', 'string'],
-            'templates.collection.after.*.props' => ['present', 'array'],
+            'templates.*' => ['sometimes', 'array'],
+            'templates.*.before' => ['sometimes', 'array'],
+            'templates.*.before.*.type' => ['sometimes', 'string'],
+            'templates.*.before.*.props' => ['sometimes', 'array'],
+            'templates.*.after' => ['sometimes', 'array'],
+            'templates.*.after.*.type' => ['sometimes', 'string'],
+            'templates.*.after.*.props' => ['sometimes', 'array'],
         ]);
 
         return $this->normalizePayload($data);
@@ -195,15 +186,18 @@ class BuilderController extends Controller
             return $data;
         }
 
-        foreach (['product', 'cart', 'collection'] as $page) {
-            if (! isset($data['templates'][$page]) || ! is_array($data['templates'][$page])) {
+        foreach ($data['templates'] as $page => $slots) {
+            if (! is_array($slots)) {
+                unset($data['templates'][$page]);
+
                 continue;
             }
+
             foreach (['before', 'after'] as $slot) {
-                if (! isset($data['templates'][$page][$slot]) || ! is_array($data['templates'][$page][$slot])) {
+                if (! isset($slots[$slot]) || ! is_array($slots[$slot])) {
                     continue;
                 }
-                $data['templates'][$page][$slot] = $this->registry->normalizeBlockTree($data['templates'][$page][$slot]);
+                $data['templates'][$page][$slot] = $this->registry->normalizeBlockTree($slots[$slot]);
             }
         }
 
@@ -275,6 +269,7 @@ class BuilderController extends Controller
             'header' => $theme->builderResolvedHeader(),
             'footer' => $theme->builderResolvedFooter(),
             'templates' => $theme->builderResolvedTemplates(),
+            'pages' => $this->themePackages->pages(),
             'status' => $theme->status->value,
             'usesDraftOverlay' => $theme->usesDraftOverlay(),
             'hasUnpublishedDraft' => $theme->hasUnpublishedDraft(),
@@ -290,7 +285,7 @@ class BuilderController extends Controller
             return;
         }
 
-        abort_unless($theme->store_id === $tenantId, 403);
+        abort_unless($theme->{Theme::ownerColumn()} === $tenantId, 403);
     }
 
     private function actingUserId(): int|string|null

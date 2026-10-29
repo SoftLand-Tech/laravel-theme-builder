@@ -18,6 +18,11 @@ it('validates the bundled default preset', function (): void {
         ->assertExitCode(0);
 });
 
+it('validates every bundled starter preset', function (string $slug): void {
+    $this->artisan('theme-builder:validate', ['slug' => $slug])
+        ->assertExitCode(0);
+})->with(['default', 'personal', 'lms', 'cms']);
+
 it('fails validation for an unknown preset slug', function (): void {
     $this->artisan('theme-builder:validate', ['slug' => 'nope'])
         ->assertExitCode(1);

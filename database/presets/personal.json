@@ -1,0 +1,189 @@
+{
+    "name": {
+        "ar": "شخصي",
+        "en": "Personal"
+    },
+    "description": {
+        "ar": "ثيم مواقع شخصية ومعارض أعمال — نبذة، خدمات، آراء العملاء، وتواصل.",
+        "en": "A personal/portfolio starter — about, services, testimonials, and contact."
+    },
+    "settings": {
+        "colors": {
+            "primary": "#1D4ED8",
+            "secondary": "#0F172A",
+            "accent": "#F59E0B",
+            "background": "#FFFFFF",
+            "surface": "#F8FAFC",
+            "text": "#0F172A",
+            "muted": "#64748B"
+        },
+        "color_schemes": [
+            {
+                "key": "1",
+                "name": "Default",
+                "background": "#FFFFFF",
+                "surface": "#F8FAFC",
+                "text": "#0F172A",
+                "muted": "#64748B",
+                "primary": "#1D4ED8",
+                "button": "#1D4ED8",
+                "button_text": "#FFFFFF",
+                "accent": "#F59E0B"
+            },
+            {
+                "key": "2",
+                "name": "Dark",
+                "background": "#0F172A",
+                "surface": "#1E293B",
+                "text": "#F8FAFC",
+                "muted": "#94A3B8",
+                "primary": "#60A5FA",
+                "button": "#1D4ED8",
+                "button_text": "#FFFFFF",
+                "accent": "#FBBF24"
+            }
+        ],
+        "typography": {
+            "heading_font": "IBM Plex Sans Arabic",
+            "body_font": "IBM Plex Sans Arabic",
+            "base_size": 16
+        },
+        "radius": {
+            "card": 12,
+            "button": 8
+        },
+        "layout": {
+            "content_width": 1152,
+            "section_rhythm": "medium"
+        }
+    },
+    "header": {
+        "logo_text": "Portfolio",
+        "logo_image": null,
+        "background_color": "#FFFFFF",
+        "text_color": "#0F172A",
+        "accent_color": "#1D4ED8",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "category_count": 5,
+        "menu": [
+            { "label": { "ar": "الرئيسية", "en": "Home" }, "url": "/" },
+            { "label": { "ar": "نبذة", "en": "About" }, "url": "/about" },
+            { "label": { "ar": "خدماتي", "en": "Services" }, "url": "/services" },
+            { "label": { "ar": "تواصل", "en": "Contact" }, "url": "/contact" }
+        ],
+        "show_search": false,
+        "show_account": false,
+        "show_cart": false
+    },
+    "footer": {
+        "tagline": { "ar": "أعمال مختارة وخبرات عملية.", "en": "Selected work and hands-on experience." },
+        "copyright_text": "Portfolio",
+        "show_links": true,
+        "background_color": "#0F172A",
+        "text_color": "#F8FAFC",
+        "muted_color": "#94A3B8",
+        "columns": [
+            {
+                "heading": { "ar": "روابط", "en": "Links" },
+                "links": [
+                    { "label": { "ar": "نبذة", "en": "About" }, "url": "/about" },
+                    { "label": { "ar": "خدماتي", "en": "Services" }, "url": "/services" }
+                ]
+            },
+            {
+                "heading": { "ar": "تواصل", "en": "Contact" },
+                "links": [
+                    { "label": { "ar": "تواصل معي", "en": "Contact me" }, "url": "/contact" }
+                ]
+            }
+        ],
+        "social": [
+            { "platform": "twitter", "url": "https://twitter.com/" },
+            { "platform": "instagram", "url": "https://instagram.com/" }
+        ],
+        "payment_icons": [],
+        "show_logo": true
+    },
+    "blocks": [
+        {
+            "type": "Hero",
+            "props": {
+                "sectionPaddingTop": "large",
+                "sectionPaddingBottom": "large",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "مرحبًا، أنا أصنع منتجات رقمية", "en": "Hi, I build digital products" },
+                "subtitle": { "ar": "تصميم وتطوير بعناية — تصفّح أعمالي وخدماتي.", "en": "Thoughtful design and development — browse my work and services." },
+                "backgroundImage": null,
+                "overlayOpacity": 30,
+                "height": "medium",
+                "ctaText": { "ar": "تواصل معي", "en": "Get in touch" },
+                "ctaUrl": "/contact",
+                "layout": "center",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Multicolumn",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "خدماتي", "en": "Services" },
+                "columns": 3,
+                "items": [
+                    { "image": null, "icon": "sparkles", "label": { "ar": "تصميم", "en": "Design" }, "text": { "ar": "واجهات واضحة وتجربة استخدام مدروسة.", "en": "Clean interfaces and thoughtful UX." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "code", "label": { "ar": "تطوير", "en": "Development" }, "text": { "ar": "مواقع سريعة وقابلة للتوسع.", "en": "Fast, scalable websites." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "chat", "label": { "ar": "استشارات", "en": "Consulting" }, "text": { "ar": "مراجعة وتحسين المنتجات القائمة.", "en": "Audits and improvements for existing products." }, "ctaText": { "ar": "", "en": "" }, "url": "" }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Testimonials",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "آراء العملاء", "en": "Testimonials" },
+                "items": [
+                    { "quote": { "ar": "تعامل راقٍ وتسليم في الموعد.", "en": "Great to work with, delivered on time." }, "author": { "ar": "عميل سعيد", "en": "Happy client" } }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "ContactForm",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "تواصل معي", "en": "Contact me" },
+                "subtitle": { "ar": "", "en": "" },
+                "showPhone": true,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        }
+    ],
+    "templates": {
+        "about": { "before": [], "after": [] },
+        "services": { "before": [], "after": [] },
+        "contact": { "before": [], "after": [] }
+    }
+}

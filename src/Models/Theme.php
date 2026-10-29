@@ -16,6 +16,7 @@ use SoftLand\ThemeBuilder\Contracts\ThemeSchema;
 use SoftLand\ThemeBuilder\Enums\SectionRhythm;
 use SoftLand\ThemeBuilder\Enums\ThemeStatus;
 use SoftLand\ThemeBuilder\Models\Scopes\PresetOrTenantScope;
+use SoftLand\ThemeBuilder\Support\ThemePackageManager;
 use SoftLand\ThemeBuilder\Support\ThemePreset;
 
 /**
@@ -61,6 +62,16 @@ class Theme extends Model
         return app()->bound(ThemeSchema::class)
             ? app(ThemeSchema::class)->tenantColumn()
             : 'store_id';
+    }
+
+    /**
+     * The owner column is always mass-assignable, even when a host remaps it
+     * (e.g. `tenant_id`) — otherwise forking/seeding silently drops the tenant.
+     */
+    #[Override]
+    public function getFillable(): array
+    {
+        return array_values(array_unique(array_merge(parent::getFillable(), [static::ownerColumn()])));
     }
 
     /** @var array<string, string|null> */
@@ -953,11 +964,7 @@ class Theme extends Model
     public function builderResolvedTemplates(): array
     {
         if ($this->usesDraftOverlay() && $this->draft_templates !== null) {
-            return array_replace_recursive([
-                'product' => ['before' => [], 'after' => []],
-                'cart' => ['before' => [], 'after' => []],
-                'collection' => ['before' => [], 'after' => []],
-            ], $this->draft_templates);
+            return array_replace_recursive($this->defaultTemplates(), $this->draft_templates);
         }
 
         return $this->resolvedTemplates();
@@ -1040,7 +1047,8 @@ class Theme extends Model
     }
 
     /**
-     * Per-template block trees (product/cart/collection pages).
+     * Per-template block trees, keyed by page (product/cart/collection/… —
+     * whatever the configured or theme-package-declared pages are).
      *
      * @return array<string, array{before: array<int, array<string, mixed>>, after: array<int, array<string, mixed>>}>
      */
@@ -1048,11 +1056,25 @@ class Theme extends Model
     {
         $templates = is_array($this->templates) ? $this->templates : [];
 
-        return array_replace_recursive([
-            'product' => ['before' => [], 'after' => []],
-            'cart' => ['before' => [], 'after' => []],
-            'collection' => ['before' => [], 'after' => []],
-        ], $templates);
+        return array_replace_recursive($this->defaultTemplates(), $templates);
+    }
+
+    /**
+     * Empty per-page template scaffolding for every known page key. Keys come
+     * from `theme-builder.pages` config → theme packages → the legacy
+     * product/cart/collection trio (see ThemePackageManager::pages()).
+     *
+     * @return array<string, array{before: array<int, array<string, mixed>>, after: array<int, array<string, mixed>>}>
+     */
+    public static function defaultTemplates(): array
+    {
+        $defaults = [];
+
+        foreach (array_keys(app(ThemePackageManager::class)->pages()) as $key) {
+            $defaults[$key] = ['before' => [], 'after' => []];
+        }
+
+        return $defaults;
     }
 
     /**

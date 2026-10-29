@@ -21,6 +21,7 @@ if (container) {
         initialHeader: JSON.parse(container.dataset.initialHeader ?? '{}'),
         initialFooter: JSON.parse(container.dataset.initialFooter ?? '{}'),
         initialTemplates: JSON.parse(container.dataset.initialTemplates ?? '{}'),
+        pages: JSON.parse(container.dataset.pages ?? '{}'),
         currentVersion: container.dataset.currentVersion ?? '',
         locale: container.dataset.locale ?? 'ar',
     };

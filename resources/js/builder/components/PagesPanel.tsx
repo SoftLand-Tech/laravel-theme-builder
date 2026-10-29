@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BLOCK_SCHEMAS, defaultPropsFor } from '../config/blocks';
+import { useLocale } from '../localeContext';
 import { FieldControl } from './FieldControl';
 import { FieldShell } from './FormControls';
 import { useT } from '../i18n';
@@ -8,6 +9,10 @@ import { useT } from '../i18n';
  * Templates are per-page marketing block lists (before / after the pinned main
  * content). Only blocks that don't depend on a product/cart context are usable
  * here (e.g. Hero, Slideshow, Testimonials — not ProductsFeatured).
+ *
+ * The page list is dynamic: it comes from the server (config / theme
+ * packages) via the `pages` prop. Without it, the legacy ecommerce trio
+ * (product/cart/collection) is assumed.
  */
 
 const ALLOWED_TEMPLATE_BLOCKS = [
@@ -18,31 +23,59 @@ const ALLOWED_TEMPLATE_BLOCKS = [
     'ProductsGrid', 'ProductsCarousel', 'ProductsTabs',
 ];
 
-type TemplateKey = 'product' | 'cart' | 'collection';
+/** The legacy fallback when the server sends no page list. */
+const LEGACY_PAGES: PagesMap = {
+    product: { label: 'Product' },
+    cart: { label: 'Cart' },
+    collection: { label: 'Collection' },
+};
+
 type Slot = 'before' | 'after';
 type WireBlock = { type: string; props: Record<string, unknown> };
 
-export interface TemplatesShape {
-    product?: { before?: WireBlock[]; after?: WireBlock[] };
-    cart?: { before?: WireBlock[]; after?: WireBlock[] };
-    collection?: { before?: WireBlock[]; after?: WireBlock[] };
+export interface PagesMap {
+    [key: string]: { label?: unknown };
 }
 
-export type PreviewPage = 'home' | 'product' | 'cart' | 'collection';
+export interface TemplatesShape {
+    [key: string]: { before?: WireBlock[]; after?: WireBlock[] };
+}
+
+export type PreviewPage = string;
 
 interface PagesPanelProps {
     previewPage: PreviewPage;
     onPreviewPageChange: (page: PreviewPage) => void;
     templates: TemplatesShape;
     onChange: (next: TemplatesShape) => void;
+    pages?: PagesMap;
 }
 
-export function PagesPanel({ previewPage, onPreviewPageChange, templates, onChange }: PagesPanelProps) {
+/** Resolve a page label ({ar,en} object or plain string) for the editor locale. */
+export function usePageLabel() {
+    const locale = useLocale();
+
+    return (key: string, meta: { label?: unknown } | undefined): string => {
+        const label = meta?.label;
+        if (typeof label === 'string' && label) return label;
+        if (label && typeof label === 'object' && !Array.isArray(label)) {
+            const bilingual = label as Record<string, string>;
+            return bilingual[locale] || bilingual.en || bilingual.ar || key;
+        }
+        return key.charAt(0).toUpperCase() + key.slice(1);
+    };
+}
+
+export function PagesPanel({ previewPage, onPreviewPageChange, templates, onChange, pages }: PagesPanelProps) {
     const t = useT();
+    const pageLabel = usePageLabel();
 
-    const templateKey: TemplateKey | null = previewPage === 'home' ? null : previewPage;
+    const resolvedPages: PagesMap = pages && Object.keys(pages).length > 0 ? pages : LEGACY_PAGES;
+    const tabs: PreviewPage[] = ['home', ...Object.keys(resolvedPages)];
 
-    const ensure = (key: TemplateKey): TemplatesShape => ({
+    const templateKey: string | null = previewPage === 'home' ? null : previewPage;
+
+    const ensure = (key: string): TemplatesShape => ({
         ...templates,
         [key]: { before: templates[key]?.before ?? [], after: templates[key]?.after ?? [] },
     });
@@ -83,8 +116,8 @@ export function PagesPanel({ previewPage, onPreviewPageChange, templates, onChan
     return (
         <div className="space-y-4">
             <h2 className="text-sm font-semibold text-neutral-900">{t('Pages')}</h2>
-            <div className="flex gap-0.5 rounded-lg border border-neutral-200 bg-neutral-100 p-0.5">
-                {(['home', 'product', 'cart', 'collection'] as const).map((p) => (
+            <div className="flex flex-wrap gap-0.5 rounded-lg border border-neutral-200 bg-neutral-100 p-0.5">
+                {tabs.map((p) => (
                     <button
                         key={p}
                         type="button"
@@ -93,7 +126,7 @@ export function PagesPanel({ previewPage, onPreviewPageChange, templates, onChan
                             previewPage === p ? 'bg-primary-600 text-white' : 'text-neutral-500 hover:text-neutral-900'
                         }`}
                     >
-                        {t(p === 'home' ? 'Home' : p === 'product' ? 'Product' : p === 'cart' ? 'Cart' : 'Categories')}
+                        {p === 'home' ? t('Home') : pageLabel(p, resolvedPages[p])}
                     </button>
                 ))}
             </div>

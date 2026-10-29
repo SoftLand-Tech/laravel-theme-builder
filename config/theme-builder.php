@@ -38,6 +38,64 @@ return [
 
     /*
     |----------------------------------------------------------------------
+    | Site type & pages
+    |----------------------------------------------------------------------
+    |
+    | `site_type` records what kind of app the builder is installed on
+    | (ecommerce | lms | cms | personal). Purely informational for hosts,
+    | theme packages, and the generated AI hand-off prompt. Null = unset
+    | (the installer fills it after scanning the app).
+    |
+    | `pages` lists the page templates editable in the builder's Pages tab
+    | (keys) and their labels. Null = auto: the union of the registered
+    | theme packages' pages, falling back to the starter pages for
+    | `site_type` (course/lesson for LMS, post/page for CMS,
+    | about/services/contact for personal, product/cart/collection for
+    | ecommerce) when no theme package is installed.
+    */
+
+    'site_type' => null, // 'ecommerce' | 'lms' | 'cms' | 'personal'
+
+    'pages' => null, // e.g. ['product' => ['label' => 'Product'], 'checkout' => ['label' => 'Checkout']]
+
+    /*
+    | Auto-discover theme packages beside this package (the dev-monorepo
+    | layout: Sites/theme-builder-ecommerce next to Sites/laravel-theme-builder,
+    | which mirrors vendor/<owner>/theme-builder-*). Installed theme packages
+    | in vendor are always discovered; this only gates the sibling glob.
+    */
+    'discover_siblings' => true,
+
+    /*
+    | Where `theme-builder:install` clones theme repos when a chosen theme
+    | isn't installed locally — and where the package manager discovers them
+    | on every boot afterwards. Clone one by hand into this directory and it
+    | works the same way. Null = the host's base_path('theme-builder-themes').
+    */
+    'themes_path' => null,
+
+    /*
+    | Git repos themes can be cloned from during `theme-builder:install`,
+    | slug => clone URL. The four official packages live under
+    | github.com/SoftLand-Tech. Point an entry at a fork to install yours.
+    */
+    'theme_repos' => [
+        'personal' => 'https://github.com/SoftLand-Tech/theme-builder-personal',
+        'ecommerce' => 'https://github.com/SoftLand-Tech/theme-builder-ecommerce',
+        'lms' => 'https://github.com/SoftLand-Tech/theme-builder-lms',
+        'cms' => 'https://github.com/SoftLand-Tech/theme-builder-cms',
+    ],
+
+    /*
+    | Whether `theme-builder:install` should offer catalog themes that are
+    | not installed yet (it would git-clone them from `theme_repos`). Turn
+    | off for offline / hermetic environments; explicit `--themes=` slugs
+    | are still honored.
+    */
+    'offer_remote_themes' => true,
+
+    /*
+    |----------------------------------------------------------------------
     | Database shape (publishable; overridable via ThemeSchema binding)
     |----------------------------------------------------------------------
     |
@@ -105,11 +163,20 @@ return [
 
     'routes_map' => [
         'home' => '/',
+        // Catalog (ecommerce-style sites).
         'product' => fn (array $p) => '/products/'.($p['slug'] ?? ''),
         'category' => fn (array $p) => '/collections/'.($p['slug'] ?? ''),
         'cart' => '/cart',
         'checkout' => '/checkout',
         'search' => '/search',
+        // Content (CMS / personal sites).
+        'page' => fn (array $p) => '/pages/'.($p['slug'] ?? ''),
+        'post' => fn (array $p) => '/blog/'.($p['slug'] ?? ''),
+        'service' => fn (array $p) => '/services/'.($p['slug'] ?? ''),
+        // Courses (LMS-style sites).
+        'course' => fn (array $p) => '/courses/'.($p['slug'] ?? ''),
+        'lesson' => fn (array $p) => '/courses/'.($p['course'] ?? '').'/'.($p['slug'] ?? ''),
+        // Shared.
         'blog.index' => '/blog',
         'contact.store' => '/contact',
     ],

@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use SoftLand\ThemeBuilder\Builder\BlockRegistry;
 use SoftLand\ThemeBuilder\Models\Theme;
+use SoftLand\ThemeBuilder\Support\ThemePackageManager;
 
 class ValidateThemeCommand extends Command
 {
@@ -23,15 +24,19 @@ class ValidateThemeCommand extends Command
     /** @var array<int, string> */
     private array $warnings = [];
 
-    public function handle(BlockRegistry $registry, Filesystem $files): int
+    private ?ThemePackageManager $themePackages = null;
+
+    public function handle(BlockRegistry $registry, Filesystem $files, ThemePackageManager $themePackages): int
     {
         if ($themeId = $this->option('theme')) {
             return $this->validateStoredTheme($registry, (int) $themeId);
         }
 
+        $this->themePackages = $themePackages;
+
         $slugs = $this->argument('slug') !== null
             ? [(string) $this->argument('slug')]
-            : $this->discoverPresets($files);
+            : array_keys($themePackages->presets());
 
         if ($slugs === []) {
             $this->components->error('No presets found. Run `php artisan theme-builder:make-theme <slug>` first.');
@@ -259,15 +264,24 @@ class ValidateThemeCommand extends Command
     /** @param  array<string, mixed>  $templates */
     private function checkTemplates(BlockRegistry $registry, array $templates): void
     {
-        foreach (['product', 'cart', 'collection'] as $page) {
+        // Known page keys: config / theme-package pages, plus the legacy trio.
+        $knownPages = array_keys($this->themePackages?->pages() ?? []);
+
+        foreach ($knownPages as $page) {
             if (! array_key_exists($page, $templates)) {
-                $this->warnings[] = "templates.{$page} missing.";
+                $this->warnings[] = "templates.{$page} missing (will fall back to empty).";
+            }
+        }
+
+        foreach ($templates as $page => $slots) {
+            if (! is_array($slots)) {
+                $this->errors[] = "templates.{$page} must be an array.";
 
                 continue;
             }
 
             foreach (['before', 'after'] as $slot) {
-                $blocks = $templates[$page][$slot] ?? [];
+                $blocks = $slots[$slot] ?? [];
 
                 if (! is_array($blocks)) {
                     $this->errors[] = "templates.{$page}.{$slot} must be an array.";
@@ -282,36 +296,13 @@ class ValidateThemeCommand extends Command
         }
     }
 
-    /**
-     * @return array<int, string>
-     */
-    private function discoverPresets(Filesystem $files): array
-    {
-        $slugs = [];
-
-        foreach ([database_path('presets'), dirname(__DIR__, 2).'/database/presets'] as $dir) {
-            if (! $files->exists($dir)) {
-                continue;
-            }
-
-            foreach ($files->files($dir) as $file) {
-                if ($file->getExtension() === 'json') {
-                    $slug = $file->getBasename('.json');
-                    $slugs[$slug] = $slug;
-                }
-            }
-        }
-
-        return array_values($slugs);
-    }
-
     /** @return array<string, mixed>|null */
     private function loadPreset(Filesystem $files, string $slug): ?array
     {
         $host = database_path("presets/{$slug}.json");
-        $path = $files->exists($host) ? $host : dirname(__DIR__, 2)."/database/presets/{$slug}.json";
+        $path = $files->exists($host) ? $host : ($this->themePackages?->presets()[$slug] ?? null);
 
-        if (! $files->exists($path)) {
+        if ($path === null || ! $files->exists($path)) {
             return null;
         }
 

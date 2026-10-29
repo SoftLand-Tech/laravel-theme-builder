@@ -22,6 +22,7 @@ return [
     ],
     'no_faqs' => 'No questions yet.',
     'no_products_in_collection' => 'No products yet.',
+    'page_empty' => 'This page has no sections yet — add some in the theme builder.',
     'no_testimonials' => 'No testimonials yet.',
     'products' => 'Products',
     'sale' => 'Sale',

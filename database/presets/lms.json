@@ -1,0 +1,186 @@
+{
+    "name": {
+        "ar": "تعليمي",
+        "en": "LMS"
+    },
+    "description": {
+        "ar": "ثيم منصات الدورات — دورات مميزة، لماذا نحن، الأسئلة الشائعة.",
+        "en": "A course-platform starter — featured courses, why-us, testimonials, FAQ."
+    },
+    "settings": {
+        "colors": {
+            "primary": "#0D9488",
+            "secondary": "#0F172A",
+            "accent": "#F59E0B",
+            "background": "#FFFFFF",
+            "surface": "#F0FDFD",
+            "text": "#0F172A",
+            "muted": "#64748B"
+        },
+        "color_schemes": [
+            {
+                "key": "1",
+                "name": "Default",
+                "background": "#FFFFFF",
+                "surface": "#F0FDFD",
+                "text": "#0F172A",
+                "muted": "#64748B",
+                "primary": "#0D9488",
+                "button": "#0D9488",
+                "button_text": "#FFFFFF",
+                "accent": "#F59E0B"
+            },
+            {
+                "key": "2",
+                "name": "Dark",
+                "background": "#0F172A",
+                "surface": "#1E293B",
+                "text": "#F8FAFC",
+                "muted": "#94A3B8",
+                "primary": "#2DD4BF",
+                "button": "#0D9488",
+                "button_text": "#FFFFFF",
+                "accent": "#FBBF24"
+            }
+        ],
+        "typography": {
+            "heading_font": "IBM Plex Sans Arabic",
+            "body_font": "IBM Plex Sans Arabic",
+            "base_size": 16
+        },
+        "radius": {
+            "card": 12,
+            "button": 8
+        },
+        "layout": {
+            "content_width": 1152,
+            "section_rhythm": "medium"
+        }
+    },
+    "header": {
+        "logo_text": "Academy",
+        "logo_image": null,
+        "background_color": "#FFFFFF",
+        "text_color": "#0F172A",
+        "accent_color": "#0D9488",
+        "sticky": true,
+        "transparent_on_hero": false,
+        "category_count": 5,
+        "menu": [
+            { "label": { "ar": "الرئيسية", "en": "Home" }, "url": "/" },
+            { "label": { "ar": "الدورات", "en": "Courses" }, "url": "/courses" }
+        ],
+        "show_search": true,
+        "show_account": true,
+        "show_cart": false
+    },
+    "footer": {
+        "tagline": { "ar": "تعلّم مهارات جديدة بالعربية.", "en": "Learn new skills, level up your career." },
+        "copyright_text": "Academy",
+        "show_links": true,
+        "background_color": "#0F172A",
+        "text_color": "#F8FAFC",
+        "muted_color": "#94A3B8",
+        "columns": [
+            {
+                "heading": { "ar": "الأكاديمية", "en": "Academy" },
+                "links": [
+                    { "label": { "ar": "الدورات", "en": "Courses" }, "url": "/courses" },
+                    { "label": { "ar": "تواصل معنا", "en": "Contact us" }, "url": "/contact" }
+                ]
+            }
+        ],
+        "social": [
+            { "platform": "youtube", "url": "https://youtube.com/" },
+            { "platform": "twitter", "url": "https://twitter.com/" }
+        ],
+        "payment_icons": [],
+        "show_logo": true
+    },
+    "blocks": [
+        {
+            "type": "Hero",
+            "props": {
+                "sectionPaddingTop": "large",
+                "sectionPaddingBottom": "large",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "تعلّم مهارات المستقبل", "en": "Learn future-ready skills" },
+                "subtitle": { "ar": "دورات عملية بالعربية مع شهادات إتمام.", "en": "Hands-on courses with completion certificates." },
+                "backgroundImage": null,
+                "overlayOpacity": 30,
+                "height": "medium",
+                "ctaText": { "ar": "تصفّح الدورات", "en": "Browse courses" },
+                "ctaUrl": "/courses",
+                "layout": "center",
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "ProductsGrid",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "دورات مميزة", "en": "Featured courses" },
+                "source": "latest",
+                "categoryId": null,
+                "productIds": [],
+                "columns": 4,
+                "mobileColumns": 2,
+                "limit": 8,
+                "showAddToCart": false,
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "Multicolumn",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "لماذا أكاديميتنا", "en": "Why our academy" },
+                "columns": 3,
+                "items": [
+                    { "image": null, "icon": "academic", "label": { "ar": "مدربون خبراء", "en": "Expert instructors" }, "text": { "ar": "نخبة من المختصين في مجالاتهم.", "en": "Top practitioners in their fields." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "certificate", "label": { "ar": "شهادات معتمدة", "en": "Certificates" }, "text": { "ar": "شهادة إتمام لكل دورة.", "en": "A completion certificate per course." }, "ctaText": { "ar": "", "en": "" }, "url": "" },
+                    { "image": null, "icon": "clock", "label": { "ar": "تعلّم بمرونة", "en": "Learn flexibly" }, "text": { "ar": "دروس مسجلة تشاهدها في أي وقت.", "en": "Recorded lessons, watch anytime." }, "ctaText": { "ar": "", "en": "" }, "url": "" }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        },
+        {
+            "type": "FaqAccordion",
+            "props": {
+                "sectionPaddingTop": "medium",
+                "sectionPaddingBottom": "medium",
+                "sectionBackground": "",
+                "sectionWidth": "contained",
+                "sectionTextAlign": "",
+                "hidden": false,
+                "title": { "ar": "الأسئلة الشائعة", "en": "Frequently asked questions" },
+                "items": [
+                    { "question": { "ar": "كيف أشترك في دورة؟", "en": "How do I enroll?" }, "answer": { "ar": "أنشئ حسابًا ثم اختر الدورة المناسبة.", "en": "Create an account, then pick a course." } },
+                    { "question": { "ar": "هل أحصل على شهادة؟", "en": "Do I get a certificate?" }, "answer": { "ar": "نعم، بعد إتمام متطلبات الدورة.", "en": "Yes, once you complete the course requirements." } }
+                ],
+                "visibleOnDesktop": true,
+                "visibleOnMobile": true
+            }
+        }
+    ],
+    "templates": {
+        "course": { "before": [], "after": [] },
+        "lesson": { "before": [], "after": [] }
+    }
+}
